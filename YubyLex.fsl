@@ -34,6 +34,7 @@ let keyword s =
     | "redo"    -> REDO
     | "next"    -> NEXT
     | "end"     -> END
+    | "then"    -> THEN
     | "and"     -> SEQAND2     (* same meaning of && *)
     | "or"      -> SEQNOT2     (* same meaning of || *)
     | "not"     -> NOT2        (* same meaning of ! *)
@@ -62,7 +63,7 @@ rule Token = parse
   | '+'             { PLUS } 
   | '-'             { MINUS } 
   | '*'             { TIMES } 
-  | '**'            { POWER } 
+  | '**'            { POWER }   (* power *)
   | '/'             { DIV } 
   | '%'             { MOD }                     
   | '='             { ASSIGN } 
@@ -89,6 +90,8 @@ rule Token = parse
   | ']'             { RBRACK }
   | ';'             { SEMI }
   | ','             { COMMA }
+  | '.'             { VISIT }
+  | '..'            { RANGE }
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }
   | '"'             { CSTSTRING (String [] lexbuf) }

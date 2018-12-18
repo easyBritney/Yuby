@@ -5,6 +5,11 @@ type typ =
   | TypI                             
   | TypC                             
   | TypA of typ * int option         (* Array type                  *)
+
+and actionscope
+  | Global of string 
+  | Inst of string
+  | Static of string
                                                                    
 and expr =                                                         
   | CstI of int                      (* Constant                    *)
@@ -27,7 +32,7 @@ and stmtordec =
   | Stmt of stmt                     (* A statement                 *)
 
 and topdec = 
-  | Fundec of typ option * string * (typ * string) list option * stmt  (* 可选参数 函数*)
+  | Fundec of string * (typ * string) list option * stmt  (* 可选参数 函数*)
   | Vardec of typ * string
 
 and program = 
