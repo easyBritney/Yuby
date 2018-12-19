@@ -56,14 +56,14 @@ let cEscape s =
 
 rule Token = parse
   | [' ' '\t' '\r'] { Token lexbuf }
-  | '\n'            { lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf }
+  | '\n'            { NL }
   | ['0'-'9']+      { CSTINT (System.Int32.Parse (lexemeAsString lexbuf)) }  
   | ['a'-'z''A'-'Z''_']['a'-'z''A'-'Z''0'-'9''_']*      (* support variable start with _ *)
                     { keyword (lexemeAsString lexbuf) } 
   | '+'             { PLUS } 
   | '-'             { MINUS } 
   | '*'             { TIMES } 
-  | '**'            { POWER }   (* power *)
+  | "**"            { POWER }   (* power *)
   | '/'             { DIV } 
   | '%'             { MOD }                     
   | '='             { ASSIGN } 
@@ -81,7 +81,8 @@ rule Token = parse
   | "||"            { SEQOR }                     
   | "&&"            { SEQAND }                     
   | "&"             { AMP }                     
-  | "!"             { NOT }                     
+  | "!"             { NOT }    
+  | '|'             { DELI }
   | '('             { LPAR }
   | ')'             { RPAR }
   | '{'             { LBRACE }
@@ -91,9 +92,39 @@ rule Token = parse
   | ';'             { SEMI }
   | ','             { COMMA }
   | '.'             { VISIT }
-  | '..'            { RANGE }
+  | ".."            { RANGE }
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }
   | '"'             { CSTSTRING (String [] lexbuf) }
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
+
+  and Comment = parse
+   | "/*"           { Comment lexbuf; Comment lexbuf }
+   | "*/"           { () }
+   | '\n'           { lexbuf.EndPos <- lexbuf.EndPos.NextLine; Comment lexbuf }
+   | (eof | '\026') { failwith "Lexer error: unterminated comment" }
+   | _              { Comment lexbuf }
+
+and EndLineComment = parse
+   | '\n'           { lexbuf.EndPos <- lexbuf.EndPos.NextLine }
+   | (eof | '\026') { () }
+   | _              { EndLineComment lexbuf }
+
+and String chars = parse 
+  | '"'
+      { Microsoft.FSharp.Core.String.concat "" (List.map string (List.rev chars)) }
+  | '\\' ['\\' '"' 'a' 'b' 't' 'n' 'v' 'f' 'r']
+      { String (cEscape (lexemeAsString lexbuf) :: chars) lexbuf }
+  | "''" 
+      { String ('\'' :: chars) lexbuf }
+  | '\\'
+      { failwith "Lexer error: illegal escape sequence" }
+  | (eof | '\026')
+      { failwith "Lexer error: unterminated string" }
+  | ['\n' '\r']
+      { failwith "Lexer error: newline in string" }
+  | ['\000'-'\031' '\127' '\255']
+      { failwith "Lexer error: invalid character in string" }
+  | _
+      { String (char (lexbuf.LexemeChar 0) :: chars) lexbuf }
