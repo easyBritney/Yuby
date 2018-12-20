@@ -6,7 +6,7 @@ open AbstractSyntax
 // g是类型构造函数，s是变量名
 
 let compose1 f (g, s) = ((fun x -> g(f(x))), s)
-let nl = Integer 10
+let nl = ConstInt 10
 
 %}
 
@@ -138,7 +138,7 @@ ExprNotAccess:
 ;
 
 AtExprNotAccess:
-    Const                               { Integer $1             }
+    Const                               { ConstInt $1             }
   | LPAR ExprNotAccess RPAR             { $2                  } 
   | AMP Access                          { Address $2             }
 ;
