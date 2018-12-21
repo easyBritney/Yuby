@@ -14,7 +14,7 @@ let nl = ConstInt 10
 %token <string> CSTSTRING NAME
 
 %token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR
-%token PLUS MINUS TIMES DIV MOD
+%token PLUS MINUS TIMES DIV MOD 
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
 %token LPAR RPAR LBRACE RBRACE LBRACK RBRACK SEMI COMMA ASSIGN AMP COLON
@@ -37,7 +37,7 @@ let nl = ConstInt 10
 %%
 
 Main:
-    TopdeClares EOF                     { Prog $1 }
+    TopDeclares EOF                     { Prog $1 }
 ;
 
 TopDeclares:
@@ -51,15 +51,15 @@ TopDeclare:
 ;
 
 VariableDeclare:
-    Type VariableDeclare                { ((fst $2) $1, snd $2) }
+    Type VariableDescribe                { ((fst $2) $1, snd $2) }
 ;
 
-VariableDeclare: 
+VariableDescribe: 
     NAME                                { ((fun t -> t), $1)                      }
-  | TIMES VariableDeclare               { compose1 TypePoint $2                        }
-  | LPAR VariableDeclare RPAR           { $2                                      } 
-  | VariableDeclare LBRACK RBRACK               { compose1 (fun t -> TypeArray(t, None)) $1    }
-  | VariableDeclare LBRACK CSTINT RBRACK        { compose1 (fun t -> TypeArray(t, Some $3)) $1 }
+  | TIMES VariableDescribe               { compose1 TypePoint $2                        }
+  | LPAR VariableDescribe RPAR           { $2                                      } 
+  | VariableDescribe LBRACK RBRACK               { compose1 (fun t -> TypeArray(t, None)) $1    }
+  | VariableDescribe LBRACK CSTINT RBRACK        { compose1 (fun t -> TypeArray(t, Some $3)) $1 }
 ;
 
 FunctionDeclare:
@@ -99,9 +99,9 @@ StmtM:  /* No unbalanced if-else */
   | Block                               { $1                   }
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
-  | SWITCH LPAR Expr RPAR StmtM         { Switch($3,$5)  }                                  (*casecase*)
-  | CASE Const COLON Expr StmtM         { Case($2,$4) :: $5}
-  | CASE Const COLON Expr               { [Case($2,$4)]}  
+  //| SWITCH LPAR Expr RPAR StmtM         { Switch($3,$5)  }                                 // (*casecase*)
+  //| CASE Const COLON Expr StmtM         { Case($2,$4) :: $5}
+  //| CASE Const COLON Expr               { [Case($2,$4)]}  
 ;
 
 StmtU:
@@ -118,7 +118,7 @@ Expr:
 ExprNotAccess:
     AtExprNotAccess                     { $1                  }
   | Access ASSIGN Expr                  { Assign($1, $3)      }
-  | NAME LPAR Exprs RPAR                { Call($1, $3)        }  
+  | NAME LPAR Exprs RPAR                { CallOperator($1, $3)        }  
   | NOT Expr                            { UnaryPrimitiveOperator("!", $2)      }
   | PRINT Expr                          { UnaryPrimitiveOperator("printi", $2) }
   | PRINTLN                             { UnaryPrimitiveOperator("printc", nl) }

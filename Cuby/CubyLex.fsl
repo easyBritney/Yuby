@@ -49,10 +49,10 @@ rule Token = parse
                     { keyword (lexemeAsString lexbuf) }     (*support _*)
   | '+'             { PLUS } 
   | '-'             { MINUS } 
-  | "++"            { SELFPLUS }
-  | "--"            { SELFMINUS}
   | '*'             { TIMES } 
   | '/'             { DIV } 
+  //| "++"            { SELFPLUS } 
+  //| "--"            { SELFMINUS} 
   | '%'             { MOD }                     
   | '='             { ASSIGN } 
   | "=="            { EQ } 

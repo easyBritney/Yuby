@@ -5,9 +5,11 @@ type IPrimitiveType =
     | TypeChar
     | TypeString    (**)
     | TypeFloat     (**)
-    | TypeStruct of 
+    | TypeVoid      (**)
+    | TypeStruct of IPrimitiveType list
     | TypeArray of IPrimitiveType * int option
     | TypePoint of IPrimitiveType
+    | Lambda of IPrimitiveType option * (IPrimitiveType * string) list * IStatement (*匿名*)
 
 and IExpression = 
     | Access of IAccess                  (* x,   *x,     x[i]    *)
@@ -17,6 +19,8 @@ and IExpression =
     | ConstString of string (*constant string*)
     | ConstFloat of float (*constant float*)
     | ConstChar of char (*constant char*) 
+    | ConstNull of int (*default 0*)
+    | NullExpression of int (*default 1*)
     | UnaryPrimitiveOperator of string * IExpression
     | BinaryPrimitiveOperator of string * IExpression * IExpression
     | AndOperator of IExpression * IExpression
@@ -27,19 +31,17 @@ and IAccess =
     | AccessVariable of string
     | AccessDeclareReference of IExpression
     | AccessIndex of IAccess * IExpression
+    | AccessMember of IAccess * string  (**)
 
 and IStatement =
     | If of IExpression * IStatement * IStatement
     | While of IExpression * IStatement
     | Expression of IExpression
     | Return of IExpression option
-    | Block of StatementDeclare list
+    | Block of StatementORDeclare list
     | For of IExpression * IExpression * IExpression * IStatement (* normal for *)
-    | Switch of IExpression * IStatement
-    | Case of (int * IStatement) list
-
-and IDeclare = 
-    | Declare of IPrimitiveType * string
+    | Switch of IExpression * IStatement list
+    | Case of int * IStatement
 
 and StatementORDeclare = 
     | Declare of IPrimitiveType * string
