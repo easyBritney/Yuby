@@ -40,16 +40,17 @@ and IStatement =
     | Return of IExpression option
     | Block of StatementORDeclare list
     | For of IExpression * IExpression * IExpression * IStatement (* normal for *)
-    | Switch of IExpression * IStatement list
     | Case of int * IStatement
+    | Switch of IExpression * IStatement list
+    | Range of IExpression * IExpression * IExpression * IStatement 
 
 and StatementORDeclare = 
-    | Declare of IPrimitiveType * string
+    | Declare of IPrimitiveType * string 
     | Statement of IStatement
 
 and TopDeclare =
     | FunctionDeclare of IPrimitiveType option * string * (IPrimitiveType * string) list * IStatement
-    | VariableDeclare of IPrimitiveType * string
+    | VariableDeclare of IPrimitiveType * string 
 
 and Program = 
     | Prog of TopDeclare list

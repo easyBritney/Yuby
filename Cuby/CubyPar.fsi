@@ -13,6 +13,8 @@ type token =
   | ASSIGN
   | AMP
   | COLON
+  | CONTINUE
+  | BREAK
   | NOT
   | SEQOR
   | SEQAND
@@ -27,6 +29,8 @@ type token =
   | TIMES
   | DIV
   | MOD
+  | SELFPLUS
+  | SELFMINUS
   | CHAR
   | ELSE
   | IF
@@ -40,6 +44,9 @@ type token =
   | SWITCH
   | CASE
   | FOR
+  | IN
+  | RANGE
+  | STRING
   | CSTSTRING of (string)
   | NAME of (string)
   | CSTINT of (int)
@@ -57,6 +64,8 @@ type tokenId =
     | TOKEN_ASSIGN
     | TOKEN_AMP
     | TOKEN_COLON
+    | TOKEN_CONTINUE
+    | TOKEN_BREAK
     | TOKEN_NOT
     | TOKEN_SEQOR
     | TOKEN_SEQAND
@@ -71,6 +80,8 @@ type tokenId =
     | TOKEN_TIMES
     | TOKEN_DIV
     | TOKEN_MOD
+    | TOKEN_SELFPLUS
+    | TOKEN_SELFMINUS
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF
@@ -84,6 +95,9 @@ type tokenId =
     | TOKEN_SWITCH
     | TOKEN_CASE
     | TOKEN_FOR
+    | TOKEN_IN
+    | TOKEN_RANGE
+    | TOKEN_STRING
     | TOKEN_CSTSTRING
     | TOKEN_NAME
     | TOKEN_CSTINT
@@ -104,6 +118,7 @@ type nonTerminalId =
     | NONTERM_StmtOrDeclareSeq
     | NONTERM_Stmt
     | NONTERM_StmtM
+    | NONTERM_StmtC
     | NONTERM_StmtU
     | NONTERM_Expr
     | NONTERM_ExprNotAccess
@@ -112,6 +127,7 @@ type nonTerminalId =
     | NONTERM_Exprs
     | NONTERM_Exprs1
     | NONTERM_Const
+    | NONTERM_ConstString
     | NONTERM_Type
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int

@@ -13,11 +13,11 @@ let nl = ConstInt 10
 %token <int> CSTINT CSTBOOL
 %token <string> CSTSTRING NAME
 
-%token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR
-%token PLUS MINUS TIMES DIV MOD 
+%token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING
+%token PLUS MINUS TIMES DIV MOD SELFPLUS SELFMINUS
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
-%token LPAR RPAR LBRACE RBRACE LBRACK RBRACK SEMI COMMA ASSIGN AMP COLON
+%token LPAR RPAR LBRACE RBRACE LBRACK RBRACK SEMI COMMA ASSIGN AMP COLON CONTINUE BREAK
 %token EOF
 
 %right ASSIGN             /* lowest precedence */
@@ -28,7 +28,7 @@ let nl = ConstInt 10
 %left GT LT GE LE
 %left PLUS MINUS
 %left TIMES DIV MOD 
-%nonassoc NOT AMP 
+%nonassoc NOT AMP SELFPLUS SELFMINUS 
 %nonassoc LBRACK          /* highest precedence  */
 
 %start Main
@@ -51,7 +51,8 @@ TopDeclare:
 ;
 
 VariableDeclare:
-    Type VariableDescribe                { ((fst $2) $1, snd $2) }
+    Type VariableDescribe                { ((fst $2) $1, snd $2 ) }
+  //| Type VariableDescribe ASSIGN Expr    { ((fst $2) $1, snd $2 )}
 ;
 
 VariableDescribe: 
@@ -84,7 +85,7 @@ Block:
 StmtOrDeclareSeq:
     /* empty */                         { [] }
   | Stmt StmtOrDeclareSeq                 { Statement $1 :: $2 }
-  | VariableDeclare SEMI StmtOrDeclareSeq            { Declare (fst $1, snd $1) :: $3 }
+  | VariableDeclare SEMI StmtOrDeclareSeq { Declare (fst $1, snd $1) :: $3 }
 ;
 
 Stmt: 
@@ -93,16 +94,23 @@ Stmt:
 ;
 
 StmtM:  /* No unbalanced if-else */
-    Expr SEMI                           { Expression($1)             }
+    Expr SEMI                           { Expression($1)       }
   | RETURN SEMI                         { Return None          }
+  //| BREAK SEMI                          { }
+  //| CONTINUE SEMI                       { }
   | RETURN Expr SEMI                    { Return(Some($2))     }
   | Block                               { $1                   }
+  | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtM     { For($3,$5,$7,$9)  }
+  | FOR Expr IN LPAR Expr RANGE Expr RPAR StmtM      { Range($2,$5,$7,$9)}
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
-  //| SWITCH LPAR Expr RPAR StmtM         { Switch($3,$5)  }                                 // (*casecase*)
-  //| CASE Const COLON Expr StmtM         { Case($2,$4) :: $5}
-  //| CASE Const COLON Expr               { [Case($2,$4)]}  
+  | SWITCH LPAR Expr RPAR LBRACE StmtC RBRACE        { Switch($3,$6)  }                                 // (*casecase*)
 ;
+
+StmtC:
+    CASE Const COLON StmtM               { [Case($2,$4)]}  
+  | CASE Const COLON StmtM StmtC         { Case($2,$4) :: $5}
+   
 
 StmtU:
     IF LPAR Expr RPAR StmtM ELSE StmtU  { If($3, $5, $7)       }
@@ -121,6 +129,8 @@ ExprNotAccess:
   | NAME LPAR Exprs RPAR                { CallOperator($1, $3)        }  
   | NOT Expr                            { UnaryPrimitiveOperator("!", $2)      }
   | PRINT Expr                          { UnaryPrimitiveOperator("printi", $2) }
+  //| SELFPLUS Expr                       { UnaryPrimitiveOperator("++", $2)     }
+  //| SELFPLUS Expr                       { UnaryPrimitiveOperator("--", $2)     }
   | PRINTLN                             { UnaryPrimitiveOperator("printc", nl) }
   | Expr PLUS  Expr                     { BinaryPrimitiveOperator("+",  $1, $3) }
   | Expr MINUS Expr                     { BinaryPrimitiveOperator("-",  $1, $3) }
@@ -139,9 +149,10 @@ ExprNotAccess:
 
 AtExprNotAccess:
     Const                               { ConstInt $1             }
-  | LPAR ExprNotAccess RPAR             { $2                  } 
-  | AMP Access                          { Address $2             }
-;
+  | ConstString                         { ConstString($1)         }
+  | LPAR ExprNotAccess RPAR             { $2                      } 
+  | AMP Access                          { Address $2              }
+; 
 
 Access:
     NAME                                { AccessVariable $1           }
@@ -167,8 +178,11 @@ Const:
   | MINUS CSTINT                        { - $2     }
   | NULL                                { -1       }
 ;
-
+ConstString:
+  CSTSTRING                             { $1       }
+ 
 Type:
-    INT                                 { TypeInt     }
+    INT                                 { TypeInt      }
   | CHAR                                { TypeChar     }
+  | STRING                              { TypeString   }
 ;

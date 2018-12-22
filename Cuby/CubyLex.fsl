@@ -24,7 +24,11 @@ let keyword s =
     | "case"    -> CASE    
     | "switch"  -> SWITCH   
     | "while"   -> WHILE   
-    | "for"     -> FOR      
+    | "for"     -> FOR     
+    | "in"      -> IN 
+    | "break"   -> BREAK
+    | "continue"-> CONTINUE
+    | "string"  -> STRING
     | _         -> NAME s
  
 let cEscape s = 
@@ -51,10 +55,11 @@ rule Token = parse
   | '-'             { MINUS } 
   | '*'             { TIMES } 
   | '/'             { DIV } 
-  //| "++"            { SELFPLUS } 
-  //| "--"            { SELFMINUS} 
+  | "++"            { SELFPLUS } 
+  | "--"            { SELFMINUS} 
   | '%'             { MOD }                     
   | '='             { ASSIGN } 
+  | ".."            { RANGE  }
   | "=="            { EQ } 
   | "!="            { NE }
   | '>'             { GT }
