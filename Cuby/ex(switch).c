@@ -1,5 +1,6 @@
 int main(){
     int n;
+    int i;
     switch(n){
         case 1:n=n+n;
         case 2:n=n*n;

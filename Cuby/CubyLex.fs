@@ -1,4 +1,4 @@
-# 1 "CubyLex.fsl"
+# 1 ".\CubyLex.fsl"
  
  
 module CubyLex
@@ -45,7 +45,7 @@ let cEscape s =
     | "\\r"  -> '\r'
     | _      -> failwith "Lexer error: impossible C escape"
 
-# 48 "CubyLex.fs"
+# 48 ".\CubyLex.fs"
 let trans : uint16[] array = 
     [| 
     (* State 0 *)
@@ -198,282 +198,282 @@ and String chars (lexbuf : Microsoft.FSharp.Text.Lexing.LexBuffer<_>) = _fslex_S
 and _fslex_Token  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 49 "CubyLex.fsl"
+# 49 ".\CubyLex.fsl"
                                      Token lexbuf 
-# 203 "CubyLex.fs"
+# 203 ".\CubyLex.fs"
           )
   | 1 -> ( 
-# 50 "CubyLex.fsl"
+# 50 ".\CubyLex.fsl"
                                      lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf 
-# 208 "CubyLex.fs"
+# 208 ".\CubyLex.fs"
           )
   | 2 -> ( 
-# 51 "CubyLex.fsl"
+# 51 ".\CubyLex.fsl"
                                      CSTINT (System.Int32.Parse (lexemeAsString lexbuf)) 
-# 213 "CubyLex.fs"
+# 213 ".\CubyLex.fs"
           )
   | 3 -> ( 
-# 53 "CubyLex.fsl"
+# 53 ".\CubyLex.fsl"
                                      keyword (lexemeAsString lexbuf) 
-# 218 "CubyLex.fs"
+# 218 ".\CubyLex.fs"
           )
   | 4 -> ( 
-# 54 "CubyLex.fsl"
+# 54 ".\CubyLex.fsl"
                                      PLUS 
-# 223 "CubyLex.fs"
+# 223 ".\CubyLex.fs"
           )
   | 5 -> ( 
-# 55 "CubyLex.fsl"
+# 55 ".\CubyLex.fsl"
                                      MINUS 
-# 228 "CubyLex.fs"
+# 228 ".\CubyLex.fs"
           )
   | 6 -> ( 
-# 56 "CubyLex.fsl"
+# 56 ".\CubyLex.fsl"
                                      TIMES 
-# 233 "CubyLex.fs"
+# 233 ".\CubyLex.fs"
           )
   | 7 -> ( 
-# 57 "CubyLex.fsl"
+# 57 ".\CubyLex.fsl"
                                      DIV 
-# 238 "CubyLex.fs"
+# 238 ".\CubyLex.fs"
           )
   | 8 -> ( 
-# 58 "CubyLex.fsl"
+# 58 ".\CubyLex.fsl"
                                      SELFPLUS 
-# 243 "CubyLex.fs"
+# 243 ".\CubyLex.fs"
           )
   | 9 -> ( 
-# 59 "CubyLex.fsl"
+# 59 ".\CubyLex.fsl"
                                      SELFMINUS
-# 248 "CubyLex.fs"
+# 248 ".\CubyLex.fs"
           )
   | 10 -> ( 
-# 60 "CubyLex.fsl"
+# 60 ".\CubyLex.fsl"
                                      MOD 
-# 253 "CubyLex.fs"
+# 253 ".\CubyLex.fs"
           )
   | 11 -> ( 
-# 61 "CubyLex.fsl"
+# 61 ".\CubyLex.fsl"
                                      ASSIGN 
-# 258 "CubyLex.fs"
+# 258 ".\CubyLex.fs"
           )
   | 12 -> ( 
-# 62 "CubyLex.fsl"
+# 62 ".\CubyLex.fsl"
                                      RANGE  
-# 263 "CubyLex.fs"
+# 263 ".\CubyLex.fs"
           )
   | 13 -> ( 
-# 63 "CubyLex.fsl"
+# 63 ".\CubyLex.fsl"
                                      EQ 
-# 268 "CubyLex.fs"
+# 268 ".\CubyLex.fs"
           )
   | 14 -> ( 
-# 64 "CubyLex.fsl"
+# 64 ".\CubyLex.fsl"
                                      NE 
-# 273 "CubyLex.fs"
+# 273 ".\CubyLex.fs"
           )
   | 15 -> ( 
-# 65 "CubyLex.fsl"
+# 65 ".\CubyLex.fsl"
                                      GT 
-# 278 "CubyLex.fs"
+# 278 ".\CubyLex.fs"
           )
   | 16 -> ( 
-# 66 "CubyLex.fsl"
+# 66 ".\CubyLex.fsl"
                                      LT 
-# 283 "CubyLex.fs"
+# 283 ".\CubyLex.fs"
           )
   | 17 -> ( 
-# 67 "CubyLex.fsl"
+# 67 ".\CubyLex.fsl"
                                      COLON 
-# 288 "CubyLex.fs"
+# 288 ".\CubyLex.fs"
           )
   | 18 -> ( 
-# 68 "CubyLex.fsl"
+# 68 ".\CubyLex.fsl"
                                      GE 
-# 293 "CubyLex.fs"
+# 293 ".\CubyLex.fs"
           )
   | 19 -> ( 
-# 69 "CubyLex.fsl"
+# 69 ".\CubyLex.fsl"
                                      LE 
-# 298 "CubyLex.fs"
+# 298 ".\CubyLex.fs"
           )
   | 20 -> ( 
-# 70 "CubyLex.fsl"
+# 70 ".\CubyLex.fsl"
                                      SEQOR 
-# 303 "CubyLex.fs"
+# 303 ".\CubyLex.fs"
           )
   | 21 -> ( 
-# 71 "CubyLex.fsl"
+# 71 ".\CubyLex.fsl"
                                      SEQAND 
-# 308 "CubyLex.fs"
+# 308 ".\CubyLex.fs"
           )
   | 22 -> ( 
-# 72 "CubyLex.fsl"
+# 72 ".\CubyLex.fsl"
                                      AMP 
-# 313 "CubyLex.fs"
+# 313 ".\CubyLex.fs"
           )
   | 23 -> ( 
-# 73 "CubyLex.fsl"
+# 73 ".\CubyLex.fsl"
                                      NOT 
-# 318 "CubyLex.fs"
+# 318 ".\CubyLex.fs"
           )
   | 24 -> ( 
-# 74 "CubyLex.fsl"
+# 74 ".\CubyLex.fsl"
                                      LPAR 
-# 323 "CubyLex.fs"
+# 323 ".\CubyLex.fs"
           )
   | 25 -> ( 
-# 75 "CubyLex.fsl"
+# 75 ".\CubyLex.fsl"
                                      RPAR 
-# 328 "CubyLex.fs"
+# 328 ".\CubyLex.fs"
           )
   | 26 -> ( 
-# 76 "CubyLex.fsl"
+# 76 ".\CubyLex.fsl"
                                      LBRACE 
-# 333 "CubyLex.fs"
+# 333 ".\CubyLex.fs"
           )
   | 27 -> ( 
-# 77 "CubyLex.fsl"
+# 77 ".\CubyLex.fsl"
                                      RBRACE 
-# 338 "CubyLex.fs"
+# 338 ".\CubyLex.fs"
           )
   | 28 -> ( 
-# 78 "CubyLex.fsl"
+# 78 ".\CubyLex.fsl"
                                      LBRACK 
-# 343 "CubyLex.fs"
+# 343 ".\CubyLex.fs"
           )
   | 29 -> ( 
-# 79 "CubyLex.fsl"
+# 79 ".\CubyLex.fsl"
                                      RBRACK 
-# 348 "CubyLex.fs"
+# 348 ".\CubyLex.fs"
           )
   | 30 -> ( 
-# 80 "CubyLex.fsl"
+# 80 ".\CubyLex.fsl"
                                      SEMI 
-# 353 "CubyLex.fs"
+# 353 ".\CubyLex.fs"
           )
   | 31 -> ( 
-# 81 "CubyLex.fsl"
+# 81 ".\CubyLex.fsl"
                                      COMMA 
-# 358 "CubyLex.fs"
+# 358 ".\CubyLex.fs"
           )
   | 32 -> ( 
-# 82 "CubyLex.fsl"
+# 82 ".\CubyLex.fsl"
                                      EndLineComment lexbuf; Token lexbuf 
-# 363 "CubyLex.fs"
+# 363 ".\CubyLex.fs"
           )
   | 33 -> ( 
-# 83 "CubyLex.fsl"
+# 83 ".\CubyLex.fsl"
                                      Comment lexbuf; Token lexbuf 
-# 368 "CubyLex.fs"
+# 368 ".\CubyLex.fs"
           )
   | 34 -> ( 
-# 84 "CubyLex.fsl"
+# 84 ".\CubyLex.fsl"
                                      CSTSTRING (String [] lexbuf) 
-# 373 "CubyLex.fs"
+# 373 ".\CubyLex.fs"
           )
   | 35 -> ( 
-# 85 "CubyLex.fsl"
+# 85 ".\CubyLex.fsl"
                                      EOF 
-# 378 "CubyLex.fs"
+# 378 ".\CubyLex.fs"
           )
   | 36 -> ( 
-# 86 "CubyLex.fsl"
+# 86 ".\CubyLex.fsl"
                                      failwith "Lexer error: illegal symbol" 
-# 383 "CubyLex.fs"
+# 383 ".\CubyLex.fs"
           )
   | _ -> failwith "Token"
 (* Rule Comment *)
 and _fslex_Comment  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 89 "CubyLex.fsl"
+# 89 ".\CubyLex.fsl"
                                      Comment lexbuf; Comment lexbuf 
-# 392 "CubyLex.fs"
+# 392 ".\CubyLex.fs"
           )
   | 1 -> ( 
-# 90 "CubyLex.fsl"
+# 90 ".\CubyLex.fsl"
                                      () 
-# 397 "CubyLex.fs"
+# 397 ".\CubyLex.fs"
           )
   | 2 -> ( 
-# 91 "CubyLex.fsl"
+# 91 ".\CubyLex.fsl"
                                      lexbuf.EndPos <- lexbuf.EndPos.NextLine; Comment lexbuf 
-# 402 "CubyLex.fs"
+# 402 ".\CubyLex.fs"
           )
   | 3 -> ( 
-# 92 "CubyLex.fsl"
+# 92 ".\CubyLex.fsl"
                                      failwith "Lexer error: unterminated comment" 
-# 407 "CubyLex.fs"
+# 407 ".\CubyLex.fs"
           )
   | 4 -> ( 
-# 93 "CubyLex.fsl"
+# 93 ".\CubyLex.fsl"
                                      Comment lexbuf 
-# 412 "CubyLex.fs"
+# 412 ".\CubyLex.fs"
           )
   | _ -> failwith "Comment"
 (* Rule EndLineComment *)
 and _fslex_EndLineComment  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 96 "CubyLex.fsl"
+# 96 ".\CubyLex.fsl"
                                      lexbuf.EndPos <- lexbuf.EndPos.NextLine 
-# 421 "CubyLex.fs"
+# 421 ".\CubyLex.fs"
           )
   | 1 -> ( 
-# 97 "CubyLex.fsl"
+# 97 ".\CubyLex.fsl"
                                      () 
-# 426 "CubyLex.fs"
+# 426 ".\CubyLex.fs"
           )
   | 2 -> ( 
-# 98 "CubyLex.fsl"
+# 98 ".\CubyLex.fsl"
                                      EndLineComment lexbuf 
-# 431 "CubyLex.fs"
+# 431 ".\CubyLex.fs"
           )
   | _ -> failwith "EndLineComment"
 (* Rule String *)
 and _fslex_String chars _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 102 "CubyLex.fsl"
+# 102 ".\CubyLex.fsl"
                        Microsoft.FSharp.Core.String.concat "" (List.map string (List.rev chars)) 
-# 440 "CubyLex.fs"
+# 440 ".\CubyLex.fs"
           )
   | 1 -> ( 
-# 104 "CubyLex.fsl"
+# 104 ".\CubyLex.fsl"
                        String (cEscape (lexemeAsString lexbuf) :: chars) lexbuf 
-# 445 "CubyLex.fs"
+# 445 ".\CubyLex.fs"
           )
   | 2 -> ( 
-# 106 "CubyLex.fsl"
+# 106 ".\CubyLex.fsl"
                        String ('\'' :: chars) lexbuf 
-# 450 "CubyLex.fs"
+# 450 ".\CubyLex.fs"
           )
   | 3 -> ( 
-# 108 "CubyLex.fsl"
+# 108 ".\CubyLex.fsl"
                        failwith "Lexer error: illegal escape sequence" 
-# 455 "CubyLex.fs"
+# 455 ".\CubyLex.fs"
           )
   | 4 -> ( 
-# 110 "CubyLex.fsl"
+# 110 ".\CubyLex.fsl"
                        failwith "Lexer error: unterminated string" 
-# 460 "CubyLex.fs"
+# 460 ".\CubyLex.fs"
           )
   | 5 -> ( 
-# 112 "CubyLex.fsl"
+# 112 ".\CubyLex.fsl"
                        failwith "Lexer error: newline in string" 
-# 465 "CubyLex.fs"
+# 465 ".\CubyLex.fs"
           )
   | 6 -> ( 
-# 114 "CubyLex.fsl"
+# 114 ".\CubyLex.fsl"
                        failwith "Lexer error: invalid character in string" 
-# 470 "CubyLex.fs"
+# 470 ".\CubyLex.fs"
           )
   | 7 -> ( 
-# 116 "CubyLex.fsl"
+# 116 ".\CubyLex.fsl"
                        String (char (lexbuf.LexemeChar 0) :: chars) lexbuf 
-# 475 "CubyLex.fs"
+# 475 ".\CubyLex.fs"
           )
   | _ -> failwith "String"
 
-# 3000000 "CubyLex.fs"
+# 3000000 ".\CubyLex.fs"
