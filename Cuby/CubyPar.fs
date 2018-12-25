@@ -3,7 +3,7 @@ module CubyPar
 #nowarn "64";; // turn off warnings that type variables used in production annotations are instantiated to concrete type
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-# 1 ".\CubyPar.fsy"
+# 1 "CubyPar.fsy"
 
 
 open AbstractSyntax
@@ -15,7 +15,7 @@ let compose1 f (g, s) = ((fun x -> g(f(x))), s)
 let nl = ConstInt 10
 
 
-# 18 ".\CubyPar.fs"
+# 18 "CubyPar.fs"
 // This type is the type of tokens accepted by the parser
 type token = 
   | EOF
@@ -466,7 +466,7 @@ let _fsyacc_reductionSymbolCounts = [|1us; 2us; 0us; 2us; 2us; 1us; 2us; 1us; 2u
 let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 3us; 3us; 4us; 5us; 5us; 5us; 5us; 5us; 6us; 6us; 7us; 7us; 8us; 8us; 9us; 10us; 10us; 10us; 11us; 11us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 12us; 13us; 13us; 14us; 14us; 14us; 15us; 15us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 16us; 17us; 17us; 17us; 17us; 18us; 18us; 18us; 18us; 18us; 19us; 19us; 20us; 20us; 21us; 21us; 21us; 21us; 22us; 23us; 23us; 23us; |]
 let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 16385us; 65535us; 16387us; 65535us; 16388us; 16389us; 65535us; 65535us; 65535us; 16391us; 65535us; 65535us; 65535us; 65535us; 65535us; 16393us; 65535us; 16394us; 65535us; 16395us; 65535us; 65535us; 65535us; 65535us; 65535us; 16396us; 65535us; 65535us; 65535us; 16397us; 16399us; 65535us; 65535us; 16401us; 65535us; 65535us; 16402us; 65535us; 16404us; 65535us; 65535us; 16405us; 16406us; 65535us; 16407us; 65535us; 16408us; 65535us; 16409us; 65535us; 16410us; 16411us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16412us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16413us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16414us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16415us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16416us; 65535us; 65535us; 65535us; 65535us; 16418us; 16419us; 16420us; 16421us; 65535us; 65535us; 16423us; 65535us; 16424us; 65535us; 65535us; 65535us; 65535us; 65535us; 16426us; 65535us; 65535us; 65535us; 65535us; 16429us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 16443us; 16444us; 65535us; 16445us; 65535us; 65535us; 16447us; 65535us; 65535us; 16448us; 65535us; 65535us; 16450us; 65535us; 16451us; 16453us; 65535us; 16455us; 16456us; 16457us; 65535us; 16458us; 16459us; 16460us; 16461us; 16462us; 16463us; |]
 let _fsyacc_reductions ()  =    [| 
-# 469 ".\CubyPar.fs"
+# 469 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : AbstractSyntax.Program)) in
             Microsoft.FSharp.Core.Operators.box
@@ -475,130 +475,130 @@ let _fsyacc_reductions ()  =    [|
                       raise (Microsoft.FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : '_startMain));
-# 478 ".\CubyPar.fs"
+# 478 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'TopDeclares)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 40 ".\CubyPar.fsy"
+# 40 "CubyPar.fsy"
                                                                Prog _1 
                    )
-# 40 ".\CubyPar.fsy"
+# 40 "CubyPar.fsy"
                  : AbstractSyntax.Program));
-# 489 ".\CubyPar.fs"
+# 489 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 44 ".\CubyPar.fsy"
+# 44 "CubyPar.fsy"
                                                                [] 
                    )
-# 44 ".\CubyPar.fsy"
+# 44 "CubyPar.fsy"
                  : 'TopDeclares));
-# 499 ".\CubyPar.fs"
+# 499 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'TopDeclare)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'TopDeclares)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 45 ".\CubyPar.fsy"
+# 45 "CubyPar.fsy"
                                                                _1 :: _2 
                    )
-# 45 ".\CubyPar.fsy"
+# 45 "CubyPar.fsy"
                  : 'TopDeclares));
-# 511 ".\CubyPar.fs"
+# 511 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDeclare)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 49 ".\CubyPar.fsy"
+# 49 "CubyPar.fsy"
                                                                VariableDeclare(fst _1, snd _1) 
                    )
-# 49 ".\CubyPar.fsy"
+# 49 "CubyPar.fsy"
                  : 'TopDeclare));
-# 522 ".\CubyPar.fs"
+# 522 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'FunctionDeclare)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 50 ".\CubyPar.fsy"
+# 50 "CubyPar.fsy"
                                                                _1 
                    )
-# 50 ".\CubyPar.fsy"
+# 50 "CubyPar.fsy"
                  : 'TopDeclare));
-# 533 ".\CubyPar.fs"
+# 533 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Type)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDescribe)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 54 ".\CubyPar.fsy"
+# 54 "CubyPar.fsy"
                                                                 ((fst _2) _1, snd _2 ) 
                    )
-# 54 ".\CubyPar.fsy"
+# 54 "CubyPar.fsy"
                  : 'VariableDeclare));
-# 545 ".\CubyPar.fs"
+# 545 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 59 ".\CubyPar.fsy"
+# 59 "CubyPar.fsy"
                                                                ((fun t -> t), _1)                      
                    )
-# 59 ".\CubyPar.fsy"
+# 59 "CubyPar.fsy"
                  : 'VariableDescribe));
-# 556 ".\CubyPar.fs"
+# 556 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDescribe)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 60 ".\CubyPar.fsy"
+# 60 "CubyPar.fsy"
                                                                 compose1 TypePoint _2                        
                    )
-# 60 ".\CubyPar.fsy"
+# 60 "CubyPar.fsy"
                  : 'VariableDescribe));
-# 567 ".\CubyPar.fs"
+# 567 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDescribe)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 61 ".\CubyPar.fsy"
+# 61 "CubyPar.fsy"
                                                                 _2                                      
                    )
-# 61 ".\CubyPar.fsy"
+# 61 "CubyPar.fsy"
                  : 'VariableDescribe));
-# 578 ".\CubyPar.fs"
+# 578 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDescribe)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 62 ".\CubyPar.fsy"
+# 62 "CubyPar.fsy"
                                                                         compose1 (fun t -> TypeArray(t, None)) _1    
                    )
-# 62 ".\CubyPar.fsy"
+# 62 "CubyPar.fsy"
                  : 'VariableDescribe));
-# 589 ".\CubyPar.fs"
+# 589 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDescribe)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 63 ".\CubyPar.fsy"
+# 63 "CubyPar.fsy"
                                                                         compose1 (fun t -> TypeArray(t, Some _3)) _1 
                    )
-# 63 ".\CubyPar.fsy"
+# 63 "CubyPar.fsy"
                  : 'VariableDescribe));
-# 601 ".\CubyPar.fs"
+# 601 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'ParamDeclares)) in
@@ -606,12 +606,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 67 ".\CubyPar.fsy"
+# 67 "CubyPar.fsy"
                                                                    FunctionDeclare(None,     _2, _4, _6) 
                    )
-# 67 ".\CubyPar.fsy"
+# 67 "CubyPar.fsy"
                  : 'FunctionDeclare));
-# 614 ".\CubyPar.fs"
+# 614 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Type)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
@@ -620,166 +620,166 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 68 ".\CubyPar.fsy"
+# 68 "CubyPar.fsy"
                                                                    FunctionDeclare(Some(_1), _2, _4, _6) 
                    )
-# 68 ".\CubyPar.fsy"
+# 68 "CubyPar.fsy"
                  : 'FunctionDeclare));
-# 628 ".\CubyPar.fs"
+# 628 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 72 ".\CubyPar.fsy"
+# 72 "CubyPar.fsy"
                                                                [] 
                    )
-# 72 ".\CubyPar.fsy"
+# 72 "CubyPar.fsy"
                  : 'ParamDeclares));
-# 638 ".\CubyPar.fs"
+# 638 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ParamDeclaresNotEmpty)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 73 ".\CubyPar.fsy"
+# 73 "CubyPar.fsy"
                                                                _1 
                    )
-# 73 ".\CubyPar.fsy"
+# 73 "CubyPar.fsy"
                  : 'ParamDeclares));
-# 649 ".\CubyPar.fs"
+# 649 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDeclare)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 77 ".\CubyPar.fsy"
+# 77 "CubyPar.fsy"
                                                                        [_1]     
                    )
-# 77 ".\CubyPar.fsy"
+# 77 "CubyPar.fsy"
                  : 'ParamDeclaresNotEmpty));
-# 660 ".\CubyPar.fs"
+# 660 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDeclare)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ParamDeclaresNotEmpty)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 78 ".\CubyPar.fsy"
+# 78 "CubyPar.fsy"
                                                                              _1 :: _3 
                    )
-# 78 ".\CubyPar.fsy"
+# 78 "CubyPar.fsy"
                  : 'ParamDeclaresNotEmpty));
-# 672 ".\CubyPar.fs"
+# 672 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtOrDeclareSeq)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 82 ".\CubyPar.fsy"
+# 82 "CubyPar.fsy"
                                                                    Block _2 
                    )
-# 82 ".\CubyPar.fsy"
+# 82 "CubyPar.fsy"
                  : 'Block));
-# 683 ".\CubyPar.fs"
+# 683 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 86 ".\CubyPar.fsy"
+# 86 "CubyPar.fsy"
                                                                [] 
                    )
-# 86 ".\CubyPar.fsy"
+# 86 "CubyPar.fsy"
                  : 'StmtOrDeclareSeq));
-# 693 ".\CubyPar.fs"
+# 693 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Stmt)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtOrDeclareSeq)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 87 ".\CubyPar.fsy"
+# 87 "CubyPar.fsy"
                                                                  Statement _1 :: _2 
                    )
-# 87 ".\CubyPar.fsy"
+# 87 "CubyPar.fsy"
                  : 'StmtOrDeclareSeq));
-# 705 ".\CubyPar.fs"
+# 705 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'VariableDeclare)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtOrDeclareSeq)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 88 ".\CubyPar.fsy"
+# 88 "CubyPar.fsy"
                                                                  Declare (fst _1, snd _1) :: _3 
                    )
-# 88 ".\CubyPar.fsy"
+# 88 "CubyPar.fsy"
                  : 'StmtOrDeclareSeq));
-# 717 ".\CubyPar.fs"
+# 717 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 92 ".\CubyPar.fsy"
+# 92 "CubyPar.fsy"
                                                                _1 
                    )
-# 92 ".\CubyPar.fsy"
+# 92 "CubyPar.fsy"
                  : 'Stmt));
-# 728 ".\CubyPar.fs"
+# 728 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtU)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 93 ".\CubyPar.fsy"
+# 93 "CubyPar.fsy"
                                                                _1 
                    )
-# 93 ".\CubyPar.fsy"
+# 93 "CubyPar.fsy"
                  : 'Stmt));
-# 739 ".\CubyPar.fs"
+# 739 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 97 ".\CubyPar.fsy"
+# 97 "CubyPar.fsy"
                                                                Expression(_1)       
                    )
-# 97 ".\CubyPar.fsy"
+# 97 "CubyPar.fsy"
                  : 'StmtM));
-# 750 ".\CubyPar.fs"
+# 750 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 98 ".\CubyPar.fsy"
+# 98 "CubyPar.fsy"
                                                                Return None          
                    )
-# 98 ".\CubyPar.fsy"
+# 98 "CubyPar.fsy"
                  : 'StmtM));
-# 760 ".\CubyPar.fs"
+# 760 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 101 ".\CubyPar.fsy"
+# 101 "CubyPar.fsy"
                                                                Return(Some(_2))     
                    )
-# 101 ".\CubyPar.fsy"
+# 101 "CubyPar.fsy"
                  : 'StmtM));
-# 771 ".\CubyPar.fs"
+# 771 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Block)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 102 ".\CubyPar.fsy"
+# 102 "CubyPar.fsy"
                                                                _1                   
                    )
-# 102 ".\CubyPar.fsy"
+# 102 "CubyPar.fsy"
                  : 'StmtM));
-# 782 ".\CubyPar.fs"
+# 782 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
@@ -788,12 +788,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 103 ".\CubyPar.fsy"
+# 103 "CubyPar.fsy"
                                                                             For(_3,_5,_7,_9)  
                    )
-# 103 ".\CubyPar.fsy"
+# 103 "CubyPar.fsy"
                  : 'StmtM));
-# 796 ".\CubyPar.fs"
+# 796 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
@@ -802,12 +802,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 104 ".\CubyPar.fsy"
+# 104 "CubyPar.fsy"
                                                                             Range(_2,_5,_7,_9)
                    )
-# 104 ".\CubyPar.fsy"
+# 104 "CubyPar.fsy"
                  : 'StmtM));
-# 810 ".\CubyPar.fs"
+# 810 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
@@ -815,48 +815,48 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 105 ".\CubyPar.fsy"
+# 105 "CubyPar.fsy"
                                                                If(_3, _5, _7)       
                    )
-# 105 ".\CubyPar.fsy"
+# 105 "CubyPar.fsy"
                  : 'StmtM));
-# 823 ".\CubyPar.fs"
+# 823 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 106 ".\CubyPar.fsy"
+# 106 "CubyPar.fsy"
                                                                While(_3, _5)        
                    )
-# 106 ".\CubyPar.fsy"
+# 106 "CubyPar.fsy"
                  : 'StmtM));
-# 835 ".\CubyPar.fs"
+# 835 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _6 = (let data = parseState.GetInput(6) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtC)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 107 ".\CubyPar.fsy"
+# 107 "CubyPar.fsy"
                                                                             Switch(_3,_6)  
                    )
-# 107 ".\CubyPar.fsy"
+# 107 "CubyPar.fsy"
                  : 'StmtM));
-# 847 ".\CubyPar.fs"
+# 847 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Const)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 111 ".\CubyPar.fsy"
+# 111 "CubyPar.fsy"
                                                                 [Case(_2,_4)]
                    )
-# 111 ".\CubyPar.fsy"
+# 111 "CubyPar.fsy"
                  : 'StmtC));
-# 859 ".\CubyPar.fs"
+# 859 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Const)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
@@ -864,12 +864,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 112 ".\CubyPar.fsy"
+# 112 "CubyPar.fsy"
                                                                 Case(_2,_4) :: _5
                    )
-# 112 ".\CubyPar.fsy"
+# 112 "CubyPar.fsy"
                  : 'StmtC));
-# 872 ".\CubyPar.fs"
+# 872 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtM)) in
@@ -877,510 +877,510 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 116 ".\CubyPar.fsy"
+# 116 "CubyPar.fsy"
                                                                If(_3, _5, _7)       
                    )
-# 116 ".\CubyPar.fsy"
+# 116 "CubyPar.fsy"
                  : 'StmtU));
-# 885 ".\CubyPar.fs"
+# 885 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'Stmt)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 117 ".\CubyPar.fsy"
+# 117 "CubyPar.fsy"
                                                                If(_3, _5, Block []) 
                    )
-# 117 ".\CubyPar.fsy"
+# 117 "CubyPar.fsy"
                  : 'StmtU));
-# 897 ".\CubyPar.fs"
+# 897 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _5 = (let data = parseState.GetInput(5) in (Microsoft.FSharp.Core.Operators.unbox data : 'StmtU)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 118 ".\CubyPar.fsy"
+# 118 "CubyPar.fsy"
                                                                While(_3, _5)        
                    )
-# 118 ".\CubyPar.fsy"
+# 118 "CubyPar.fsy"
                  : 'StmtU));
-# 909 ".\CubyPar.fs"
+# 909 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 122 ".\CubyPar.fsy"
+# 122 "CubyPar.fsy"
                                                                Access _1           
                    )
-# 122 ".\CubyPar.fsy"
+# 122 "CubyPar.fsy"
                  : 'Expr));
-# 920 ".\CubyPar.fs"
+# 920 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ExprNotAccess)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 123 ".\CubyPar.fsy"
+# 123 "CubyPar.fsy"
                                                                _1                  
                    )
-# 123 ".\CubyPar.fsy"
+# 123 "CubyPar.fsy"
                  : 'Expr));
-# 931 ".\CubyPar.fs"
+# 931 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'AtExprNotAccess)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 127 ".\CubyPar.fsy"
+# 127 "CubyPar.fsy"
                                                                _1                  
                    )
-# 127 ".\CubyPar.fsy"
+# 127 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 942 ".\CubyPar.fs"
+# 942 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 128 ".\CubyPar.fsy"
+# 128 "CubyPar.fsy"
                                                                Assign(_1, _3)      
                    )
-# 128 ".\CubyPar.fsy"
+# 128 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 954 ".\CubyPar.fs"
+# 954 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Exprs)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 129 ".\CubyPar.fsy"
+# 129 "CubyPar.fsy"
                                                                CallOperator(_1, _3)        
                    )
-# 129 ".\CubyPar.fsy"
+# 129 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 966 ".\CubyPar.fs"
+# 966 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 130 ".\CubyPar.fsy"
+# 130 "CubyPar.fsy"
                                                                UnaryPrimitiveOperator("!", _2)      
                    )
-# 130 ".\CubyPar.fsy"
+# 130 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 977 ".\CubyPar.fs"
+# 977 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 131 ".\CubyPar.fsy"
+# 131 "CubyPar.fsy"
                                                                UnaryPrimitiveOperator("printi", _2) 
                    )
-# 131 ".\CubyPar.fsy"
+# 131 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 988 ".\CubyPar.fs"
+# 988 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 134 ".\CubyPar.fsy"
+# 134 "CubyPar.fsy"
                                                                UnaryPrimitiveOperator("printc", nl) 
                    )
-# 134 ".\CubyPar.fsy"
+# 134 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 998 ".\CubyPar.fs"
+# 998 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 135 ".\CubyPar.fsy"
+# 135 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("+",  _1, _3) 
                    )
-# 135 ".\CubyPar.fsy"
+# 135 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1010 ".\CubyPar.fs"
+# 1010 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 136 ".\CubyPar.fsy"
+# 136 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("-",  _1, _3) 
                    )
-# 136 ".\CubyPar.fsy"
+# 136 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1022 ".\CubyPar.fs"
+# 1022 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 137 ".\CubyPar.fsy"
+# 137 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("*",  _1, _3) 
                    )
-# 137 ".\CubyPar.fsy"
+# 137 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1034 ".\CubyPar.fs"
+# 1034 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 138 ".\CubyPar.fsy"
+# 138 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("/",  _1, _3) 
                    )
-# 138 ".\CubyPar.fsy"
+# 138 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1046 ".\CubyPar.fs"
+# 1046 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 139 ".\CubyPar.fsy"
+# 139 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("%",  _1, _3) 
                    )
-# 139 ".\CubyPar.fsy"
+# 139 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1058 ".\CubyPar.fs"
+# 1058 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 140 ".\CubyPar.fsy"
+# 140 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("==", _1, _3) 
                    )
-# 140 ".\CubyPar.fsy"
+# 140 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1070 ".\CubyPar.fs"
+# 1070 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 141 ".\CubyPar.fsy"
+# 141 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("!=", _1, _3) 
                    )
-# 141 ".\CubyPar.fsy"
+# 141 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1082 ".\CubyPar.fs"
+# 1082 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 142 ".\CubyPar.fsy"
+# 142 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator(">",  _1, _3) 
                    )
-# 142 ".\CubyPar.fsy"
+# 142 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1094 ".\CubyPar.fs"
+# 1094 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 143 ".\CubyPar.fsy"
+# 143 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("<",  _1, _3) 
                    )
-# 143 ".\CubyPar.fsy"
+# 143 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1106 ".\CubyPar.fs"
+# 1106 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 144 ".\CubyPar.fsy"
+# 144 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator(">=", _1, _3) 
                    )
-# 144 ".\CubyPar.fsy"
+# 144 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1118 ".\CubyPar.fs"
+# 1118 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 145 ".\CubyPar.fsy"
+# 145 "CubyPar.fsy"
                                                                BinaryPrimitiveOperator("<=", _1, _3) 
                    )
-# 145 ".\CubyPar.fsy"
+# 145 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1130 ".\CubyPar.fs"
+# 1130 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 146 ".\CubyPar.fsy"
+# 146 "CubyPar.fsy"
                                                                AndOperator(_1, _3)     
                    )
-# 146 ".\CubyPar.fsy"
+# 146 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1142 ".\CubyPar.fs"
+# 1142 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 147 ".\CubyPar.fsy"
+# 147 "CubyPar.fsy"
                                                                OrOperator(_1, _3)      
                    )
-# 147 ".\CubyPar.fsy"
+# 147 "CubyPar.fsy"
                  : 'ExprNotAccess));
-# 1154 ".\CubyPar.fs"
+# 1154 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Const)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 151 ".\CubyPar.fsy"
+# 151 "CubyPar.fsy"
                                                                ConstInt _1             
                    )
-# 151 ".\CubyPar.fsy"
+# 151 "CubyPar.fsy"
                  : 'AtExprNotAccess));
-# 1165 ".\CubyPar.fs"
+# 1165 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ConstString)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 152 ".\CubyPar.fsy"
+# 152 "CubyPar.fsy"
                                                                ConstString(_1)         
                    )
-# 152 ".\CubyPar.fsy"
+# 152 "CubyPar.fsy"
                  : 'AtExprNotAccess));
-# 1176 ".\CubyPar.fs"
+# 1176 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'ExprNotAccess)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 153 ".\CubyPar.fsy"
+# 153 "CubyPar.fsy"
                                                                _2                      
                    )
-# 153 ".\CubyPar.fsy"
+# 153 "CubyPar.fsy"
                  : 'AtExprNotAccess));
-# 1187 ".\CubyPar.fs"
+# 1187 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 154 ".\CubyPar.fsy"
+# 154 "CubyPar.fsy"
                                                                Address _2              
                    )
-# 154 ".\CubyPar.fsy"
+# 154 "CubyPar.fsy"
                  : 'AtExprNotAccess));
-# 1198 ".\CubyPar.fs"
+# 1198 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 158 ".\CubyPar.fsy"
+# 158 "CubyPar.fsy"
                                                                AccessVariable _1           
                    )
-# 158 ".\CubyPar.fsy"
+# 158 "CubyPar.fsy"
                  : 'Access));
-# 1209 ".\CubyPar.fs"
+# 1209 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 159 ".\CubyPar.fsy"
+# 159 "CubyPar.fsy"
                                                                _2                  
                    )
-# 159 ".\CubyPar.fsy"
+# 159 "CubyPar.fsy"
                  : 'Access));
-# 1220 ".\CubyPar.fs"
+# 1220 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 160 ".\CubyPar.fsy"
+# 160 "CubyPar.fsy"
                                                                AccessDeclareReference (Access _2)
                    )
-# 160 ".\CubyPar.fsy"
+# 160 "CubyPar.fsy"
                  : 'Access));
-# 1231 ".\CubyPar.fs"
+# 1231 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'AtExprNotAccess)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 161 ".\CubyPar.fsy"
+# 161 "CubyPar.fsy"
                                                                AccessDeclareReference _2         
                    )
-# 161 ".\CubyPar.fsy"
+# 161 "CubyPar.fsy"
                  : 'Access));
-# 1242 ".\CubyPar.fs"
+# 1242 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Access)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 162 ".\CubyPar.fsy"
+# 162 "CubyPar.fsy"
                                                                AccessIndex(_1, _3)    
                    )
-# 162 ".\CubyPar.fsy"
+# 162 "CubyPar.fsy"
                  : 'Access));
-# 1254 ".\CubyPar.fs"
+# 1254 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 166 ".\CubyPar.fsy"
+# 166 "CubyPar.fsy"
                                                                []       
                    )
-# 166 ".\CubyPar.fsy"
+# 166 "CubyPar.fsy"
                  : 'Exprs));
-# 1264 ".\CubyPar.fs"
+# 1264 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Exprs1)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 167 ".\CubyPar.fsy"
+# 167 "CubyPar.fsy"
                                                                _1       
                    )
-# 167 ".\CubyPar.fsy"
+# 167 "CubyPar.fsy"
                  : 'Exprs));
-# 1275 ".\CubyPar.fs"
+# 1275 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 171 ".\CubyPar.fsy"
+# 171 "CubyPar.fsy"
                                                                [_1]     
                    )
-# 171 ".\CubyPar.fsy"
+# 171 "CubyPar.fsy"
                  : 'Exprs1));
-# 1286 ".\CubyPar.fs"
+# 1286 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'Expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'Exprs1)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 172 ".\CubyPar.fsy"
+# 172 "CubyPar.fsy"
                                                                _1 :: _3 
                    )
-# 172 ".\CubyPar.fsy"
+# 172 "CubyPar.fsy"
                  : 'Exprs1));
-# 1298 ".\CubyPar.fs"
+# 1298 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 176 ".\CubyPar.fsy"
+# 176 "CubyPar.fsy"
                                                                _1       
                    )
-# 176 ".\CubyPar.fsy"
+# 176 "CubyPar.fsy"
                  : 'Const));
-# 1309 ".\CubyPar.fs"
+# 1309 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 177 ".\CubyPar.fsy"
+# 177 "CubyPar.fsy"
                                                                _1       
                    )
-# 177 ".\CubyPar.fsy"
+# 177 "CubyPar.fsy"
                  : 'Const));
-# 1320 ".\CubyPar.fs"
+# 1320 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 178 ".\CubyPar.fsy"
+# 178 "CubyPar.fsy"
                                                                - _2     
                    )
-# 178 ".\CubyPar.fsy"
+# 178 "CubyPar.fsy"
                  : 'Const));
-# 1331 ".\CubyPar.fs"
+# 1331 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 179 ".\CubyPar.fsy"
+# 179 "CubyPar.fsy"
                                                                -1       
                    )
-# 179 ".\CubyPar.fsy"
+# 179 "CubyPar.fsy"
                  : 'Const));
-# 1341 ".\CubyPar.fs"
+# 1341 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 182 ".\CubyPar.fsy"
+# 182 "CubyPar.fsy"
                                                                _1       
                    )
-# 182 ".\CubyPar.fsy"
+# 182 "CubyPar.fsy"
                  : 'ConstString));
-# 1352 ".\CubyPar.fs"
+# 1352 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 185 ".\CubyPar.fsy"
+# 185 "CubyPar.fsy"
                                                                TypeInt      
                    )
-# 185 ".\CubyPar.fsy"
+# 185 "CubyPar.fsy"
                  : 'Type));
-# 1362 ".\CubyPar.fs"
+# 1362 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 186 ".\CubyPar.fsy"
+# 186 "CubyPar.fsy"
                                                                TypeChar     
                    )
-# 186 ".\CubyPar.fsy"
+# 186 "CubyPar.fsy"
                  : 'Type));
-# 1372 ".\CubyPar.fs"
+# 1372 "CubyPar.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 187 ".\CubyPar.fsy"
+# 187 "CubyPar.fsy"
                                                                TypeString   
                    )
-# 187 ".\CubyPar.fsy"
+# 187 "CubyPar.fsy"
                  : 'Type));
 |]
-# 1383 ".\CubyPar.fs"
+# 1383 "CubyPar.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
