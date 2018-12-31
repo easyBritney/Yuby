@@ -45,12 +45,14 @@ and IStatement =
     | Range of IExpression * IExpression * IExpression * IStatement 
 
 and StatementORDeclare = 
-    | Declare of IPrimitiveType * string 
+    | Declare of IPrimitiveType * string
+    | DeclareAndAssign of IPrimitiveType * string * IExpression
     | Statement of IStatement
 
 and TopDeclare =
     | FunctionDeclare of IPrimitiveType option * string * (IPrimitiveType * string) list * IStatement
     | VariableDeclare of IPrimitiveType * string 
+    | VariableDeclareAndAssign of IPrimitiveType * string * IExpression
 
 and Program = 
     | Prog of TopDeclare list
