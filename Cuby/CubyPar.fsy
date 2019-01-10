@@ -8,6 +8,10 @@ open AbstractSyntax
 let compose1 f (g, s) = ((fun x -> g(f(x))), s)
 let nl = ConstInt 10
 
+let first  (a, _, _) = a
+let second (_, b, _) = b
+let third  (_, _, c) = c
+
 %}
 
 %token <int> CSTINT CSTBOOL
@@ -47,16 +51,19 @@ TopDeclares:
 
 TopDeclare: 
     VariableDeclare SEMI                { VariableDeclare(fst $1, snd $1) }
+  | VariableDeclareAndAssign SEMI       { VariableDeclareAndAssign(first $1, second $1 , third $1)  }
   | FunctionDeclare                     { $1 }
 ;
 
 VariableDeclare:
     Type VariableDescribe                { ((fst $2) $1, snd $2 ) }
-  //| Type VariableDescribe ASSIGN Expr    { ((fst $2) $1, snd $2 )}
 ;
 
+VariableDeclareAndAssign:
+    Type VariableDescribe ASSIGN Expr    { ((fst $2) $1, snd $2 , $4) }
+
 VariableDescribe: 
-    NAME                                { ((fun t -> t), $1)                      }
+    NAME                                 { ((fun t -> t), $1)                      }
   | TIMES VariableDescribe               { compose1 TypePoint $2                        }
   | LPAR VariableDescribe RPAR           { $2                                      } 
   | VariableDescribe LBRACK RBRACK               { compose1 (fun t -> TypeArray(t, None)) $1    }
@@ -74,7 +81,7 @@ ParamDeclares:
 ;
 
 ParamDeclaresNotEmpty:
-    VariableDeclare                             { [$1]     }
+    VariableDeclare                                   { [$1]     }
   | VariableDeclare COMMA ParamDeclaresNotEmpty       { $1 :: $3 }
 ;
 
@@ -86,6 +93,7 @@ StmtOrDeclareSeq:
     /* empty */                         { [] }
   | Stmt StmtOrDeclareSeq                 { Statement $1 :: $2 }
   | VariableDeclare SEMI StmtOrDeclareSeq { Declare (fst $1, snd $1) :: $3 }
+  | VariableDeclareAndAssign SEMI StmtOrDeclareSeq { DeclareAndAssign(first $1, second $1 , third $1) :: $3 }
 ;
 
 Stmt: 

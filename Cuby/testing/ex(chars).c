@@ -1,5 +1,6 @@
+
+string a="213456";
 int main ()
 {
-    string a;
-    a = "6545646";
+    int a = 7;
 }
