@@ -43,7 +43,7 @@ Ruby是一门完全面向对象的编程语言，我尝试去实现面向对象�
 `fslex --unicode CubyLex.fsl`  
 生成`CubyLex.fs`词法分析器
 
-`fsyacc --module CPar CPar.fsy`  
+`fsyacc --module CubyPar CubyPar.fsy`  
 生成`CubyPar.fs`语法分析器与`CubyPar.fsi`  
 
 `javac Machine.java`  
