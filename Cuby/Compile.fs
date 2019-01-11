@@ -145,6 +145,7 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction list) : 
         let (jumptest, C1) = 
             makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C))
         addJump jumptest (Label labbegin :: cStmt body varEnv funEnv C1)
+
     | For(dec, e, opera,body) ->   
         let labbegin = newLabel()                       //设置label 
         let (jumptest, C2) =                                                
