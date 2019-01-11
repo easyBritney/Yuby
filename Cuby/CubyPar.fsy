@@ -137,8 +137,10 @@ ExprNotAccess:
   | NAME LPAR Exprs RPAR                { CallOperator($1, $3)        }  
   | NOT Expr                            { UnaryPrimitiveOperator("!", $2)      }
   | PRINT Expr                          { UnaryPrimitiveOperator("printi", $2) }
-  //| SELFPLUS Expr                       { UnaryPrimitiveOperator("++", $2)     }
-  //| SELFPLUS Expr                       { UnaryPrimitiveOperator("--", $2)     }
+  | Expr SELFPLUS                       { UnaryPrimitiveOperator("I++", $1)     }
+  | Expr SELFMINUS                      { UnaryPrimitiveOperator("I--", $1)     }
+  | SELFPLUS Expr                       { UnaryPrimitiveOperator("++I", $2)     }
+  | SELFMINUS  Expr                     { UnaryPrimitiveOperator("--I", $2)     }
   | PRINTLN                             { UnaryPrimitiveOperator("printc", nl) }
   | Expr PLUS  Expr                     { BinaryPrimitiveOperator("+",  $1, $3) }
   | Expr MINUS Expr                     { BinaryPrimitiveOperator("-",  $1, $3) }

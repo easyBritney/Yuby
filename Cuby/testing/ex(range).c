@@ -1,8 +1,10 @@
 int main()
 {
     int n;
+    int s;
+    s = 0;
     for n in (3..7)
     {
-        n=n+1;
+        s = s+n;
     }
 }
