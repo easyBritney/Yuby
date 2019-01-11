@@ -118,19 +118,7 @@ let bindParams paras (env, fdepth) : VarEnv =
     List.fold bindParam (env, fdepth) paras;
 
 
-let makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * instruction list =
-    let rec addv decs varEnv funEnv =
-        match decs with
-        | [] -> (varEnv, funEnv, [])
-        | dec::decr ->
-            match dec with
-            | VariableDeclare (typ, x) -> 
-                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
-                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
-                (varEnvr, funEnvr, code1 @ coder)
-            | FunctionDeclare (tyOpt, f, xs, body) ->
-                addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv)
-    addv topdecs ([], 0) []
+
 
 
 let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction list) : instruction list = 
@@ -191,6 +179,9 @@ and bStmtordec stmtOrDec varEnv : bstmtordec * VarEnv =
     | Declare (typ, x)  ->
         let (varEnv1, code) = allocate Locvar (typ, x) varEnv
         (BDec code, varEnv1)
+    | DeclareAndAssign (typ, x, e) ->
+        let (varEnv1, code) = allocate Locvar (typ, x) varEnv
+        (BDec (cAccess (AccessVariable(x)) varEnv1 [] (cExpr e varEnv1 [] (STI :: (addINCSP -1 code)))), varEnv1)
 
 and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction list) : instruction list =
     match e with
@@ -255,6 +246,26 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction
                     :: cExpr e2 varEnv funEnv (addJump jumpend C2))
     | CallOperator(f, es)   -> callfun f es varEnv funEnv C
     // | AccessMember (_, _)
+
+
+and makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * instruction list =
+    let rec addv decs varEnv funEnv =
+        match decs with
+        | [] -> (varEnv, funEnv, [])
+        | dec::decr ->
+            match dec with
+            | VariableDeclare (typ, x) -> 
+                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
+                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
+                (varEnvr, funEnvr, code1 @ coder)
+            | VariableDeclareAndAssign (typ, x, e) -> 
+                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
+                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
+                (varEnvr, funEnvr, code1 @ (cAccess (AccessVariable(x)) varEnvr funEnvr (cExpr e varEnvr funEnvr (STI :: (addINCSP -1 coder)))))
+            | FunctionDeclare (tyOpt, f, xs, body) ->
+                addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv)
+            
+    addv topdecs ([], 0) []
 and cAccess access varEnv funEnv C =
     match access with
     | AccessVariable x  ->
@@ -295,7 +306,8 @@ let cProgram (Prog topdecs) : instruction list =
         List.choose (function 
                         | FunctionDeclare (rTy, name, argTy, body)
                                             ->  Some (compilefun (rTy, name, argTy, body))
-                        | VariableDeclare _ -> None)
+                        | VariableDeclare _ -> None
+                        | VariableDeclareAndAssign _ -> None)
                         topdecs
     let (mainlab, _, mainparams) = lookup funEnv "main"
     let argc = List.length mainparams
