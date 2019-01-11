@@ -32,8 +32,9 @@ let third  (_, _, c) = c
 %left GT LT GE LE
 %left PLUS MINUS
 %left TIMES DIV MOD 
-%nonassoc NOT AMP SELFPLUS SELFMINUS 
+%right NOT AMP SELFPLUS SELFMINUS 
 %nonassoc LBRACK          /* highest precedence  */
+
 
 %start Main
 %type <AbstractSyntax.Program> Main 
