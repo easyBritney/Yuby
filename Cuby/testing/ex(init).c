@@ -1,3 +1,5 @@
+int a;
 int main(){
-    int a = 1;
+
+    print a;
 }
