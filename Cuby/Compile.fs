@@ -145,9 +145,14 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction list) : 
         let (jumptest, C1) = 
             makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C))
         addJump jumptest (Label labbegin :: cStmt body varEnv funEnv C1)
-    | FOR(dec, e, opera,stmt)
-        let decinstr = cExpr e varEnv funEnv (addINCSP -1 C)
-        
+    | For(dec, e, opera,body) ->   
+        let labbegin = newLabel()
+        let (jumptest, C2) =
+            makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C)) 
+        let C3 = cExpr opera varEnv funEnv (addINCSP -1 C2)
+        let C4 = cStmt body varEnv funEnv C3
+        cExpr dec varEnv funEnv (addINCSP -1 (addJump jumptest  (Label labbegin :: C4) ) )
+// compileToFile (fromFile "testing/ex(for).c ") "testing/ex(for).out";;        
     | Expression e ->
         cExpr e varEnv funEnv (addINCSP -1 C)
     | Block stmts ->
