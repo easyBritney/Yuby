@@ -113,7 +113,7 @@ int main(){
     print c;
 }
 ```
-
+![](img/ex(init).png)
     
 
 ## 技术评价
