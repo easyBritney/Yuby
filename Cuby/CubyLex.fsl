@@ -21,6 +21,7 @@ let keyword s =
     | "return"  -> RETURN
     | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
+    | "do"      -> DO
     | "case"    -> CASE    
     | "switch"  -> SWITCH   
     | "while"   -> WHILE   
@@ -65,11 +66,12 @@ rule Token = parse
   | '>'             { GT }
   | '<'             { LT }
   | ':'             { COLON }           (*casecase*)
+  | '?'             { QUEST } 
   | ">="            { GE }
   | "<="            { LE }
   | "||"            { SEQOR }                     
   | "&&"            { SEQAND }                     
-  | "&"             { AMP }                     
+  | "&"             { AMP }     
   | "!"             { NOT }                     
   | '('             { LPAR }
   | ')'             { RPAR }

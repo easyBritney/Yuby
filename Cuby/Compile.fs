@@ -134,6 +134,28 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction list) : 
             makeJump (cExpr e varEnv funEnv (IFNZRO labbegin :: C))
         addJump jumptest (Label labbegin :: cStmt body varEnv funEnv C1)
 
+    | Switch(e,cases)   ->
+        let (labend, C1) = addLabel C
+        let lablist = []
+        let rec everycase c  = 
+            match c with
+            | [Case(cond,body)] -> 
+                let (label,C2) = addLabel(cStmt body varEnv funEnv C1 )
+                let (label2, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv (IFZERO labend :: C2))
+                (label,label2,C3)
+            | Case(cond,body) :: tr->
+                let (labnextbody,labnext,C2) = everycase tr
+                let (label, C3) = addLabel(cStmt body varEnv funEnv (addGOTO labnextbody C2))
+                let (label2, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv (IFZERO labnext :: C3))
+                (label,label2,C4)
+            | [] -> (labend, labend,C1)
+        let (label,label2,C2) = everycase cases
+        C2
+    | DoWhile(body, e) ->
+        let labbegin = newLabel()
+        let C1 = 
+            cExpr e varEnv funEnv (IFNZRO labbegin :: C)
+        Label labbegin :: cStmt body varEnv funEnv C1 //先执行body
     | For(dec, e, opera,body) ->   
         let labbegin = newLabel()                       //设置label 
         let (jumptest, C2) =                                                
@@ -230,7 +252,10 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction
                 | ">"   -> SWAP ::  LT  :: C
                 | "<="  -> SWAP ::  LT  :: addNOT C
                 | _     -> failwith "Error: unknown binary operator"))
-
+    | TernaryPrimitiveOperator(cond, e1, e2)    ->
+        let (jumpend, C1) = makeJump C
+        let (labelse, C2) = addLabel (cExpr e2 varEnv funEnv C1)
+        cExpr cond varEnv funEnv (IFZERO labelse :: cExpr e1 varEnv funEnv (addJump jumpend C2))
     | AndOperator(e1, e2)   ->
         match C with
         | IFZERO lab :: _ ->
