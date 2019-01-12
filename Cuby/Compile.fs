@@ -191,11 +191,28 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (C : instruction
     // | ConstChar _       -> 
     | Address acc       -> cAccess acc varEnv funEnv C
     | UnaryPrimitiveOperator(ope, e1) ->
+        let rec tmp stat =
+                    match stat with
+                    | Access (c) -> c               //get IAccess
         cExpr e1 varEnv funEnv
             (match ope with
             | "!"       -> addNOT C
             | "printi"  -> PRINTI :: C
             | "printc"  -> PRINTC :: C
+            | "I++" -> 
+                let ass = Assign (tmp e1,BinaryPrimitiveOperator ("+",Access (tmp e1),ConstInt 1))
+                cExpr ass varEnv funEnv (addINCSP -1 C)
+            | "I--" ->
+                let ass = Assign (tmp e1,BinaryPrimitiveOperator ("-",Access (tmp e1),ConstInt 1))
+                cExpr ass varEnv funEnv (addINCSP -1 C)
+            | "++I" -> 
+                let ass = Assign (tmp e1,BinaryPrimitiveOperator ("+",Access (tmp e1),ConstInt 1))
+                let C1 = cExpr ass varEnv funEnv C
+                CSTI 1 :: ADD :: (addINCSP -1 C1)
+            | "--I" -> 
+                let ass = Assign (tmp e1,BinaryPrimitiveOperator ("-",Access (tmp e1),ConstInt 1))
+                let C1 = cExpr ass varEnv funEnv C
+                CSTI 1 :: SUB :: (addINCSP -1 C1)
             | _         -> failwith "Error: unknown unary operator")
     | BinaryPrimitiveOperator(ope, e1, e2)    ->
         cExpr e1 varEnv funEnv
