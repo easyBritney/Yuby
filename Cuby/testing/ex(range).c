@@ -6,5 +6,6 @@ int main()
     for n in (3..7)
     {
         s = s+n;
+        print s;
     }
 }
