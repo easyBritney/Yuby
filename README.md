@@ -66,7 +66,7 @@ Ruby是一门完全面向对象的编程语言，我尝试去实现面向对象�
 例子：
 
 ```fsharp
-compileToFile (fromFile "ex11.c") "ex11.out";;  
+compileToFile (fromFile "testing/ex(init).c") "testing/ex(init).out";;  
 #q;;
 // 将文件ex11.c编译，生成中间表示存入文件"ex11.out"
 
@@ -89,7 +89,32 @@ java Machinetrace ex9.out 0
 ```
 
 ## 功能实现
+- 变量定义
+  - 简介：原本的microC只有变量声明，我们改进了它使它具有变量定义，且在全局环境与local环境都具有变量定义的功能。
+  - 对比
+```C
+// old
+int a;
+a = 3;
+int main(){
 
+    print a;
+} 
+```
+```C
+// new (ex(init).c)
+int a = 1;
+int b = 2;
+
+int main(){
+    int c = 3;
+    print a;
+    print b;
+    print c;
+}
+```
+![](img/ex(init).png)
+    
 
 ## 技术评价
 
