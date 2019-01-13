@@ -7,6 +7,6 @@ int main()
     }
     catch("ArithmeticalExcption")
     {
-        n=0;
+        //n=0;
     }
 }

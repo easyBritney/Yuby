@@ -32,7 +32,9 @@ type instruction =
     | PRINTC
     | LDARGS
     | STOP
-
+    | THROW of int
+    | PUSHHDLR of int * label
+    | POPHDLR
 
 let (resetLabels, newLabel) =
     let lastlab = ref -1
@@ -128,7 +130,16 @@ let CODESTOP    = 25;
 let CODECSTF    = 26;
 
 [<Literal>]
-let CODECSTC    = 26;
+let CODECSTC    = 27;
+
+[<Literal>]
+let CODETHROW   = 28;
+
+[<Literal>]
+let CODEPUSHHR  = 29;
+
+[<Literal>]
+let CODEPOPHR   = 30;
 
 let makelabenv (addr, labenv) instruction = 
     match instruction with
@@ -161,6 +172,9 @@ let makelabenv (addr, labenv) instruction =
     | PRINTC            -> (addr+1, labenv)
     | LDARGS            -> (addr+1, labenv)
     | STOP              -> (addr+1, labenv)
+    | THROW i           -> (addr+2, labenv)
+    | PUSHHDLR (exn ,lab) -> (addr+2, labenv)
+    | POPHDLR           -> (addr+1, labenv)
 
 
 let rec emitints getlab instruction ints = 
@@ -194,7 +208,9 @@ let rec emitints getlab instruction ints =
     | PRINTC            -> CODEPRINTC   :: ints
     | LDARGS            -> CODELDARGS   :: ints
     | STOP              -> CODESTOP     :: ints
-
+    | THROW i           -> CODETHROW    :: i            :: ints
+    | PUSHHDLR (exn, lab) -> CODEPUSHHR :: exn          :: getlab lab   :: ints
+    | POPHDLR           -> CODEPOPHR    :: ints
 
 let code2ints (code : instruction list) : int list = 
     let (_, labenv) = List.fold makelabenv (0, []) code
