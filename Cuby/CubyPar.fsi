@@ -15,6 +15,7 @@ type token =
   | COLON
   | CONTINUE
   | BREAK
+  | QUEST
   | NOT
   | SEQOR
   | SEQAND
@@ -48,6 +49,7 @@ type token =
   | IN
   | RANGE
   | STRING
+  | DO
   | CSTSTRING of (string)
   | NAME of (string)
   | CSTFLOAT of (float32)
@@ -68,6 +70,7 @@ type tokenId =
     | TOKEN_COLON
     | TOKEN_CONTINUE
     | TOKEN_BREAK
+    | TOKEN_QUEST
     | TOKEN_NOT
     | TOKEN_SEQOR
     | TOKEN_SEQAND
@@ -101,6 +104,7 @@ type tokenId =
     | TOKEN_IN
     | TOKEN_RANGE
     | TOKEN_STRING
+    | TOKEN_DO
     | TOKEN_CSTSTRING
     | TOKEN_NAME
     | TOKEN_CSTFLOAT

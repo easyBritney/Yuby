@@ -114,6 +114,152 @@ int main(){
 }
 ```
 ![](img/ex(init).png)
+
+---
+- 自增操作
+    - 简介:包含i++ ++i 操作
+    - 例子：
+```C
+int main(){
+    int n;
+    int a;
+    n = 2;
+    a = ++n;
+    a = n++;
+}
+```
+![](img/ex(selfplus).png)
+---
+- FOR循环
+    - 简介：增加了for循环，以及类似于Ruby的循环
+    - 例子：
+```C
+int main(){
+    int i;
+    i = 0;
+    int n;
+    n = 0;
+    for(i =0 ; i < 5 ;  ++i){
+        n = n + i;
+    }
+}
+```
+```C
+int main()
+{
+    int n;
+    int s;
+    s = 0;
+    for n in (3..7)
+    {
+        s = s+n;
+    }
+}
+```
+![](img/ex(for).png)
+![](img/ex(range).png)
+---
+- 三目运算符
+    - 简介：三目运算符 a>b?a:b
+    - 用例：
+```C
+int main()
+{
+    int a=0;
+    int b=7;
+    int c = a>b?a:b;
+}
+```
+![](img/ex(ternary).png)
+---
+- do - while
+    - 简介：在判断前先运行body中的操作。
+    - 例子：
+```C
+int main()
+{
+    int n=2;
+    do{
+        n++;
+    }while(n<0);
+}
+```
+- 运行栈追踪：
+    - n++被执行
+    - n的终值为3 处于栈中2的位置
+
+![](img/ex(dowhile).png)
+---
+- 类似C的switch-case
+    - 当没有break时，匹配到一个case后，会往下执行所以case的body
+    - 若当前没有匹配的case时，不会执行body，会一直往下找匹配的case
+    - 之前的实现是递归匹配每个case，当前类似C语言的switch-case实现上在label的设立更为复杂一些。
+    - 例子：
+```C
+int main(){
+    int i=0;
+    int n=1;
+    switch(n){
+        case 1:i=n+n;
+        case 5:i=i+n*n;
+    }
+}
+```
+
+- 运行栈追踪：
+    - n的值与case1 匹配，没有break， i=n+n与case 5 中的i+n*n都被执行
+    - i的结果为（1+1）+1*1 = 3
+    - 栈中3的位置为i，4的位置为n
+
+![](img/ex(switch).png)
+
+---
+
+- break功能
+    - 在for while switch 中，都加入break功能
+    - 维护Label表来实现
+    - 例子：与没有break的switch进行对比：
+```C
+int main(){
+    int i=0;
+    int n=1;
+    switch(n){
+        case 1:{i=n+n;break;}
+        case 5:i=i+n*n;
+    }
+}
+```
+- 运行栈追踪
+    - n的值与case1 匹配，执行i=n+n，遇到break结束。
+    - i的结果为（1+1）=2
+    - 栈中3的位置为i，4的位置为n
+
+ ![](img/ex(break).png)
+
+---
+- continue 功能
+    - 在for while 中加入continue功能
+    - 例子：
+```C
+int main()
+{
+    int i ;
+    int n = 0;
+    for(i=0;i<5;i++)
+    {
+        if(i<2)
+            continue;
+        if(i>3)
+            break;
+        n=n+i;
+    }
+}
+```
+- i=0 1 的时候continue i>3 的时候break
+- n = 2 + 3 结果为5
+- 栈中3的位置为i， 4的位置为n
+
+ ![](img/ex(continue).png)
     
 
 ## 技术评价

@@ -23,6 +23,7 @@ and IExpression =
     | NullExpression of int (*default 1*)
     | UnaryPrimitiveOperator of string * IExpression
     | BinaryPrimitiveOperator of string * IExpression * IExpression
+    | TernaryPrimitiveOperator of IExpression * IExpression * IExpression
     | AndOperator of IExpression * IExpression
     | OrOperator of IExpression * IExpression
     | CallOperator of string * IExpression list
@@ -36,13 +37,16 @@ and IAccess =
 and IStatement =
     | If of IExpression * IStatement * IStatement
     | While of IExpression * IStatement
+    | DoWhile of IStatement * IExpression
     | Expression of IExpression
     | Return of IExpression option
     | Block of StatementORDeclare list
     | For of IExpression * IExpression * IExpression * IStatement (* normal for *)
-    | Case of int * IStatement
+    | Case of IExpression * IStatement
     | Switch of IExpression * IStatement list
     | Range of IExpression * IExpression * IExpression * IStatement 
+    | Break
+    | Continue
 
 and StatementORDeclare = 
     | Declare of IPrimitiveType * string
