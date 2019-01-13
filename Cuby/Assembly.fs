@@ -4,7 +4,8 @@ type label = string
 
 type instruction =
     | Label of label
-    | CSTI of int
+    | CSTI of int32
+    | CSTF of int32
     | ADD
     | SUB
     | MUL
@@ -121,10 +122,17 @@ let CODELDARGS  = 24
 [<Literal>]
 let CODESTOP    = 25;
 
+
+[<Literal>]
+let CODECSTF    = 25;
+
+
+
 let makelabenv (addr, labenv) instruction = 
     match instruction with
     | Label lab         -> (addr, (lab, addr) :: labenv)
     | CSTI i            -> (addr+2, labenv)
+    | CSTF i            -> (addr+2, labenv)
     | ADD               -> (addr+1, labenv)
     | SUB               -> (addr+1, labenv)
     | MUL               -> (addr+1, labenv)
@@ -156,6 +164,7 @@ let rec emitints getlab instruction ints =
     match instruction with
     | Label lab         -> ints
     | CSTI i            -> CODECSTI     :: i            :: ints
+    | CSTF i            -> CODECSTF     :: i            :: ints
     | ADD               -> CODEADD      :: ints
     | SUB               -> CODESUB      :: ints
     | MUL               -> CODEMUL      :: ints
@@ -225,5 +234,6 @@ let rec decomp ints : instruction list =
     | CODELDARGS :: ints_rest                       ->   LDARGS         :: decomp ints_rest
     | CODESTOP   :: ints_rest                       ->   STOP           :: decomp ints_rest
     | CODECSTI   :: i :: ints_rest                  ->   CSTI i         :: decomp ints_rest       
+    | CODECSTF   :: i :: ints_rest                  ->   CSTF i         :: decomp ints_rest      
     | _                                             ->    printf "%A" ints; failwith "unknow code"
 

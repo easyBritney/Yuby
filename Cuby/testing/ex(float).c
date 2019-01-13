@@ -1,3 +1,3 @@
 int main(){
-    double a = 1.0;
+    float a = 1.0;
 }
