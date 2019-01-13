@@ -1,6 +1,7 @@
 module Compile
 
 open System.IO
+open System
 open AbstractSyntax
 open Assembly
 
@@ -79,6 +80,9 @@ let rec addCST i C =
     | (_, IFNZRO lab :: C1) -> addGOTO lab C1
     | _                     -> CSTI i :: C
 
+let rec addCSTF i C =
+    match (i, C) with
+    | _                     -> (CSTF (System.BitConverter.ToInt32((System.BitConverter.GetBytes(float32(i)), 0)))) :: C
 
 type 'data Env = (string * 'data) list
 
@@ -231,6 +235,7 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
     | Access acc        -> cAccess acc varEnv funEnv lablist (LDI :: C)
     | Assign(acc, e)    -> cAccess acc varEnv funEnv lablist (cExpr e varEnv funEnv lablist (STI :: C))
     | ConstInt i        -> addCST i C
+    | ConstFloat i      -> addCSTF i C
     // | ConstChar _       -> 
     | Address acc       -> cAccess acc varEnv funEnv lablist C
     | UnaryPrimitiveOperator(ope, e1) ->

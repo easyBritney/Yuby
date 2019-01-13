@@ -15,6 +15,7 @@ let keyword s =
     | "false"   -> CSTBOOL 0
     | "if"      -> IF
     | "int"     -> INT
+    | "float"   -> FLOAT
     | "null"    -> NULL
     | "print"   -> PRINT
     | "println" -> PRINTLN
@@ -50,6 +51,8 @@ rule Token = parse
   | [' ' '\t' '\r'] { Token lexbuf }
   | '\n'            { lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf }
   | ['0'-'9']+      { CSTINT (System.Int32.Parse (lexemeAsString lexbuf)) }  
+  | ['0'-'9']+'.'['0'-'9']+ 
+                    { CSTFLOAT (System.Single.Parse (lexemeAsString lexbuf)) }  
   | ['_''a'-'z''A'-'Z']['a'-'z''A'-'Z''0'-'9']*
                     { keyword (lexemeAsString lexbuf) }     (*support _*)
   | '+'             { PLUS } 

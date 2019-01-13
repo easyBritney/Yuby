@@ -17,7 +17,7 @@ and IExpression =
     | Address of IAccess                 
     | ConstInt of int   (*constant int*)
     | ConstString of string (*constant string*)
-    | ConstFloat of float (*constant float*)
+    | ConstFloat of float32 (*constant float*)
     | ConstChar of char (*constant char*) 
     | ConstNull of int (*default 0*)
     | NullExpression of int (*default 1*)
