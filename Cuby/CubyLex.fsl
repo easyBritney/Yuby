@@ -30,6 +30,9 @@ let keyword s =
     | "break"   -> BREAK
     | "continue"-> CONTINUE
     | "string"  -> STRING
+    | "try"     -> TRY
+    | "catch"   -> CATCH
+    | "throw"   -> THROW
     | _         -> NAME s
  
 let cEscape s = 

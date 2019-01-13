@@ -161,6 +161,8 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : i
             | [] -> (labend, labend,C1)
         let (label,label2,C2) = everycase cases
         C2
+    | Case(cond,body)  ->
+        C
     | DoWhile(body, e) ->
         let labbegin = newLabel()
         let C1 = 

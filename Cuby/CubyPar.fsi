@@ -32,6 +32,9 @@ type token =
   | MOD
   | SELFPLUS
   | SELFMINUS
+  | TRY
+  | CATCH
+  | THROW
   | CHAR
   | ELSE
   | IF
@@ -85,6 +88,9 @@ type tokenId =
     | TOKEN_MOD
     | TOKEN_SELFPLUS
     | TOKEN_SELFMINUS
+    | TOKEN_TRY
+    | TOKEN_CATCH
+    | TOKEN_THROW
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF
@@ -123,7 +129,9 @@ type nonTerminalId =
     | NONTERM_StmtOrDeclareSeq
     | NONTERM_Stmt
     | NONTERM_StmtM
-    | NONTERM_StmtC
+    | NONTERM_StmtCase
+    | NONTERM_StmtCatch
+    | NONTERM_EXCEPTION
     | NONTERM_StmtU
     | NONTERM_Expr
     | NONTERM_ExprNotAccess

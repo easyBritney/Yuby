@@ -45,8 +45,14 @@ and IStatement =
     | Case of IExpression * IStatement
     | Switch of IExpression * IStatement list
     | Range of IExpression * IExpression * IExpression * IStatement 
+    | Throw of IException
+    | Try of IStatement * IStatement list
+    | Catch of IException * IStatement
     | Break
     | Continue
+
+and IException = 
+    | Exception of string
 
 and StatementORDeclare = 
     | Declare of IPrimitiveType * string

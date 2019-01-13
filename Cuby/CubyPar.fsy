@@ -18,6 +18,7 @@ let third  (_, _, c) = c
 %token <string> CSTSTRING NAME
 
 %token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING DO
+%token TRY CATCH THROW
 %token PLUS MINUS TIMES DIV MOD SELFPLUS SELFMINUS
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
@@ -114,13 +115,23 @@ StmtM:  /* No unbalanced if-else */
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
   | DO StmtM WHILE LPAR Expr RPAR SEMI  { DoWhile($2, $5)      }
-  | SWITCH LPAR Expr RPAR LBRACE StmtC RBRACE        { Switch($3,$6)  }        // (*casecase*)
+  | SWITCH LPAR Expr RPAR LBRACE StmtCase RBRACE        { Switch($3,$6)  }        // (*casecase*)
+  | TRY StmtM StmtCatch                 { Try($2,$3) }
 ;
 
-StmtC:
-    CASE AtExprNotAccess COLON StmtM               { [Case($2,$4)]}  
-  | CASE AtExprNotAccess COLON StmtM StmtC         { Case($2,$4) :: $5}
-   
+StmtCase:
+    CASE AtExprNotAccess COLON StmtM               { [Case($2,$4)]    }  
+  | CASE AtExprNotAccess COLON StmtM StmtCase      { Case($2,$4) :: $5}
+;
+
+StmtCatch:
+    CATCH LPAR EXCEPTION RPAR StmtM                { [Catch($3,$5)]     }
+  | CATCH LPAR EXCEPTION RPAR StmtM StmtCatch      { Catch($3,$5) :: $6 }
+;
+
+EXCEPTION:
+  CSTSTRING                                        { Exception $1 }
+;
 
 StmtU:
     IF LPAR Expr RPAR StmtM ELSE StmtU  { If($3, $5, $7)       }
