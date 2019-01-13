@@ -98,6 +98,8 @@ public class Machine {
                     stack[sp + 1] = new CubyIntType(program.get(pc++)); sp++; break;
                 case Instruction.CSTF:
                     stack[sp + 1] = new CubyFloatType(Float.intBitsToFloat(program.get(pc++))); sp++; break;
+                case Instruction.CSTC:
+                    stack[sp + 1] = new CubyCharType((char)(program.get(pc++).intValue())); sp++; break;
                 case Instruction.ADD: {
                     stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "+");
                     sp--;

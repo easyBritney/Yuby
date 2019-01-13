@@ -26,4 +26,5 @@ public class Instruction {
     public final static int LDARGS = 24;
     public final static int STOP = 25;
     public final static int CSTF = 26;
+    public final static int CSTC = 27;
 }
