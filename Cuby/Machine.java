@@ -36,7 +36,7 @@ class Machine {
     PRINTI = 22, PRINTC = 23, 
     LDARGS = 24,
     STOP = 25;
-    FLOAT = 26;
+    FLOAT = 26, CHAR = 27, THROW 28, PUSHHR 29, POPHR 30;
 
   final static int STACKSIZE = 1000;
   
@@ -61,6 +61,7 @@ class Machine {
     int bp = -999;	// Base pointer, for local variable access 
     int sp = -1;	// Stack top pointer
     int pc = 0;		// Program counter: next instruction
+    int hr = -1;
     for (;;) {
       if (trace) 
         printsppc(s, bp, sp, p, pc);
@@ -97,6 +98,28 @@ class Machine {
         s[sp+1] = bp; sp++; break;
       case GETSP:
         s[sp+1] = sp; sp++; break;
+      case PUSHHR:{
+        s[sp] = p[pc++];    //exn
+        int tmp = sp;       //exn address
+        sp++;
+        s[sp++] = p[pc++];   //jump address
+        s[sp] = hr;
+        hr = tmp;
+        break;
+      }
+      case POPHR:
+        hr = s[sp--];sp-=2;break; 
+      case THROW:
+        while (hr != -1 && s[hr] != exn)
+          hr = s[hr+2]; //find exn address
+        if (hr != -1) { // Found a handler for exn
+          pc = s[hr+1]; // execute the handler code (a)
+          hr = s[hr+2]; // with current handler being hr
+          sp = hr-1;    // remove stack after hr
+        } else {
+          System.out.print("not find exception");
+          return sp;
+        }break;
       case INCSP:
         sp = sp+p[pc++]; break;
       case GOTO:

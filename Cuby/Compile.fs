@@ -171,6 +171,30 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : i
         C2
     | Case(cond,body)  ->
         C
+    | Try(stmt,catchs)  ->
+        let (labend, C1) = addLabel C
+        let lablist = labend :: lablist
+        let rec everycatch c  = 
+            match c with
+            | [Catch(exn,body)] -> 
+                let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
+                let Cpop = POPHDLR :: C1
+                let C2= cStmt body varEnv funEnv lablist Cpop 
+                let (label, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labend :: C2))
+                let C4 = PUSHHDLR (1 ,label) :: C3
+                (label,C4)
+            | Catch(exn,body) :: tr->
+                let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
+                let (labnext,C2) = everycatch tr
+                let C3 = cStmt body varEnv funEnv lablist (POPHDLR :: C2)
+                let (label, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labnext :: C2))
+                let C5 = PUSHHDLR (1,label) :: C4
+                (label,C5)
+            | [] -> (labend, C1)
+        let (label,C2) = everycatch catchs
+        C2
+    | Catch(exn,body)       ->
+        C
     | DoWhile(body, e) ->
         let labbegin = newLabel()
         let C1 = 
@@ -275,7 +299,13 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
                 | "*"   -> MUL  ::  C
                 | "+"   -> ADD  ::  C
                 | "-"   -> SUB  ::  C
-                | "/"   -> DIV  ::  C
+                | "/"   -> 
+                    let head C1 =
+                        match C1 with
+                        | a :: tr -> a
+                        | []-> failwith "Error: empty ins"
+                    if head C = CSTI 0 then THROW 1 :: (addINCSP -1 C)
+                    else   DIV  ::  C
                 | "%"   -> MOD  ::  C
                 | "=="  -> EQ   ::  C
                 | "!="  -> EQ   ::  addNOT C
