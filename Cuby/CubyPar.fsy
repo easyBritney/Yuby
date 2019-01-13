@@ -20,12 +20,13 @@ let third  (_, _, c) = c
 
 %token CHAR ELSE IF INT FLOAT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING DO
 %token TRY CATCH THROW
-
+%token STRUCT
 %token PLUS MINUS TIMES DIV MOD SELFPLUS SELFMINUS
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
 %token LPAR RPAR LBRACE RBRACE LBRACK RBRACK SEMI COMMA ASSIGN AMP COLON CONTINUE BREAK QUEST
 %token EOF
+
 
 %right ASSIGN             /* lowest precedence */
 %nonassoc PRINT
@@ -59,12 +60,15 @@ TopDeclare:
   | FunctionDeclare                     { $1 }
 ;
 
+
+
 VariableDeclare:
     Type VariableDescribe                { ((fst $2) $1, snd $2 ) }
 ;
 
 VariableDeclareAndAssign:
     Type VariableDescribe ASSIGN Expr    { ((fst $2) $1, snd $2 , $4) }
+
 
 VariableDescribe: 
     NAME                                 { ((fun t -> t), $1)                      }
@@ -170,7 +174,6 @@ ExprNotAccess:
   | Expr LT    Expr                     { BinaryPrimitiveOperator("<",  $1, $3) }
   | Expr GE    Expr                     { BinaryPrimitiveOperator(">=", $1, $3) }
   | Expr LE    Expr                     { BinaryPrimitiveOperator("<=", $1, $3) }
-  
   | Expr SEQAND Expr                    { AndOperator($1, $3)     }
   | Expr SEQOR  Expr                    { OrOperator($1, $3)      }
 ;
