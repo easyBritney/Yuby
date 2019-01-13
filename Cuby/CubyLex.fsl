@@ -90,6 +90,8 @@ rule Token = parse
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }
   | '"'             { CSTSTRING (String [] lexbuf) }
+  | ['\'']['a'-'z''A'-'Z''0'-'9']['\'']            
+                    { try let single = lexemeAsString lexbuf in CSTCHAR (System.Char.Parse(single.Substring(1, 1))) with ex -> failwith "Char literal error." }
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
 
@@ -104,6 +106,7 @@ and EndLineComment = parse
    | '\n'           { lexbuf.EndPos <- lexbuf.EndPos.NextLine }
    | (eof | '\026') { () }
    | _              { EndLineComment lexbuf }
+
 
 and String chars = parse 
   | '"'
@@ -122,3 +125,7 @@ and String chars = parse
       { failwith "Lexer error: invalid character in string" }
   | _
       { String (char (lexbuf.LexemeChar 0) :: chars) lexbuf }
+
+
+
+ 

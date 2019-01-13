@@ -13,12 +13,12 @@ let second (_, b, _) = b
 let third  (_, _, c) = c
 
 %}
-
 %token <int> CSTINT CSTBOOL
 %token <float32> CSTFLOAT
 %token <string> CSTSTRING NAME
+%token <char> CSTCHAR
 
-%token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING DO
+%token CHAR ELSE IF INT FLOAT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING DO
 %token TRY CATCH THROW
 
 %token PLUS MINUS TIMES DIV MOD SELFPLUS SELFMINUS
@@ -179,6 +179,7 @@ AtExprNotAccess:
     Const                               { ConstInt $1             }
   | ConstString                         { ConstString($1)         }
   | ConstFloat                          { ConstFloat($1)          }
+  | ConstChar                           { ConstChar($1)          }
   | LPAR ExprNotAccess RPAR             { $2                      } 
   | AMP Access                          { Address $2              }
 ; 
@@ -214,6 +215,9 @@ ConstString:
 ConstFloat:
     CSTFLOAT                            { $1       }
   | MINUS CSTFLOAT                      { - $2     }
+
+ConstChar:
+  CSTCHAR                               { $1       }
 Type:
     INT                                 { TypeInt      }
   | CHAR                                { TypeChar     }

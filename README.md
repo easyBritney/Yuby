@@ -66,7 +66,7 @@ Ruby是一门完全面向对象的编程语言，我尝试去实现面向对象�
 例子：
 
 ```fsharp
-compileToFile (fromFile "testing/ex(init).c") "testing/ex(init).out";;  
+compileToFile (fromFile "testing/ex(chars).c") "testing/ex(chars).out";;  
 #q;;
 // 将文件ex11.c编译，生成中间表示存入文件"ex11.out"
 

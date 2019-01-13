@@ -128,7 +128,7 @@ let CODESTOP    = 25;
 let CODECSTF    = 26;
 
 [<Literal>]
-let CODECSTC    = 26;
+let CODECSTC    = 27;
 
 let makelabenv (addr, labenv) instruction = 
     match instruction with
