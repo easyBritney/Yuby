@@ -45,6 +45,8 @@ and IStatement =
     | Case of IExpression * IStatement
     | Switch of IExpression * IStatement list
     | Range of IExpression * IExpression * IExpression * IStatement 
+    | Break
+    | Continue
 
 and StatementORDeclare = 
     | Declare of IPrimitiveType * string

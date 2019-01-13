@@ -187,6 +187,7 @@ int main()
 - 运行栈追踪：
     - n++被执行
     - n的终值为3 处于栈中2的位置
+
 ![](img/ex(dowhile).png)
 ---
 - 类似C的switch-case
@@ -209,7 +210,56 @@ int main(){
     - n的值与case1 匹配，没有break， i=n+n与case 5 中的i+n*n都被执行
     - i的结果为（1+1）+1*1 = 3
     - 栈中3的位置为i，4的位置为n
+
 ![](img/ex(switch).png)
+
+---
+
+- break功能
+    - 在for while switch 中，都加入break功能
+    - 维护Label表来实现
+    - 例子：与没有break的switch进行对比：
+```C
+int main(){
+    int i=0;
+    int n=1;
+    switch(n){
+        case 1:{i=n+n;break;}
+        case 5:i=i+n*n;
+    }
+}
+```
+- 运行栈追踪
+    - n的值与case1 匹配，执行i=n+n，遇到break结束。
+    - i的结果为（1+1）=2
+    - 栈中3的位置为i，4的位置为n
+
+ ![](img/ex(break).png)
+
+---
+- continue 功能
+    - 在for while 中加入continue功能
+    - 例子：
+```C
+int main()
+{
+    int i ;
+    int n = 0;
+    for(i=0;i<5;i++)
+    {
+        if(i<2)
+            continue;
+        if(i>3)
+            break;
+        n=n+i;
+    }
+}
+```
+- i=0 1 的时候continue i>3 的时候break
+- n = 2 + 3 结果为5
+- 栈中3的位置为i， 4的位置为n
+
+ ![](img/ex(continue).png)
     
 
 ## 技术评价

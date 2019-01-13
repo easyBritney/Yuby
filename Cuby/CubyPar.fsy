@@ -105,8 +105,8 @@ Stmt:
 StmtM:  /* No unbalanced if-else */
     Expr SEMI                           { Expression($1)       }
   | RETURN SEMI                         { Return None          }
-  //| BREAK SEMI                          { }
-  //| CONTINUE SEMI                       { }
+  | BREAK SEMI                          { Break                }
+  | CONTINUE SEMI                       { Continue             }
   | RETURN Expr SEMI                    { Return(Some($2))     }
   | Block                               { $1                   }
   | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtM     { For($3,$5,$7,$9)  }
@@ -114,7 +114,7 @@ StmtM:  /* No unbalanced if-else */
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
   | DO StmtM WHILE LPAR Expr RPAR SEMI  { DoWhile($2, $5)      }
-  | SWITCH LPAR Expr RPAR LBRACE StmtC RBRACE        { Switch($3,$6)  }                                 // (*casecase*)
+  | SWITCH LPAR Expr RPAR LBRACE StmtC RBRACE        { Switch($3,$6)  }        // (*casecase*)
 ;
 
 StmtC:
