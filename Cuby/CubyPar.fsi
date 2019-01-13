@@ -32,6 +32,8 @@ type token =
   | MOD
   | SELFPLUS
   | SELFMINUS
+  | STRUCT
+  | DOT
   | TRY
   | CATCH
   | THROW
@@ -91,6 +93,8 @@ type tokenId =
     | TOKEN_MOD
     | TOKEN_SELFPLUS
     | TOKEN_SELFMINUS
+    | TOKEN_STRUCT
+    | TOKEN_DOT
     | TOKEN_TRY
     | TOKEN_CATCH
     | TOKEN_THROW
@@ -125,6 +129,7 @@ type nonTerminalId =
     | NONTERM_Main
     | NONTERM_TopDeclares
     | NONTERM_TopDeclare
+    | NONTERM_MemberDefList
     | NONTERM_VariableDeclare
     | NONTERM_VariableDeclareAndAssign
     | NONTERM_VariableDescribe

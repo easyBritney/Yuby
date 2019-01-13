@@ -78,7 +78,8 @@ rule Token = parse
   | "<="            { LE }
   | "||"            { SEQOR }                     
   | "&&"            { SEQAND }                     
-  | "&"             { AMP }     
+  | "&"             { AMP } 
+  | "."             { DOT }   
   | "!"             { NOT }                     
   | '('             { LPAR }
   | ')'             { RPAR }

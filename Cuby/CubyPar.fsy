@@ -20,7 +20,7 @@ let third  (_, _, c) = c
 
 %token CHAR ELSE IF INT FLOAT NULL PRINT PRINTLN RETURN VOID WHILE SWITCH CASE FOR IN RANGE STRING DO
 %token TRY CATCH THROW
-%token STRUCT
+%token STRUCT DOT
 %token PLUS MINUS TIMES DIV MOD SELFPLUS SELFMINUS
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
@@ -60,6 +60,16 @@ TopDeclare:
   | FunctionDeclare                     { $1 }
 ;
 
+// StructDeclare:
+//  | STRUCT NAME LBRACE MemberDefList RBRACK SEMI      { $2 $}
+//  | STRUCT NAME LBRACE MemberDefList RBRACK NAME SEMI
+
+
+
+MemberDefList:
+    /* empty */ { [] }
+    | VariableDeclare MemberDefList { $1 :: $2 }
+;
 
 
 VariableDeclare:
