@@ -84,6 +84,10 @@ let rec addCSTF i C =
     match (i, C) with
     | _                     -> (CSTF (System.BitConverter.ToInt32((System.BitConverter.GetBytes(float32(i)), 0)))) :: C
 
+let rec addCSTC i C =
+    match (i, C) with
+    | _                     -> (CSTC ((int32)(System.BitConverter.ToInt16((System.BitConverter.GetBytes(char(i)), 0))))) :: C
+
 type 'data Env = (string * 'data) list
 
 let rec lookup env x = 
@@ -262,7 +266,7 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
     | Assign(acc, e)    -> cAccess acc varEnv funEnv lablist (cExpr e varEnv funEnv lablist (STI :: C))
     | ConstInt i        -> addCST i C
     | ConstFloat i      -> addCSTF i C
-    // | ConstChar _       -> 
+    | ConstChar i       -> addCSTC i C
     | Address acc       -> cAccess acc varEnv funEnv lablist C
     | UnaryPrimitiveOperator(ope, e1) ->
         let rec tmp stat =

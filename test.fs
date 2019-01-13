@@ -1,13 +1,7 @@
 open System
 open System.Collections.Generic
-let a = float32(-10.25)
-let b = System.BitConverter.GetBytes(a)
-
-b
-let c = System.BitConverter.ToInt32((b, 0))
+let a = 'a'
 
 
-
-let a = 1;
-let a = 1;
+(int32)(System.BitConverter.ToInt16((System.BitConverter.GetBytes(char(a)), 0)))
 

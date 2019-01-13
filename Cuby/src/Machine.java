@@ -264,36 +264,36 @@ public class Machine {
         switch(operator){
             case "+":{
                 if (flag == 1) {
-                    result =  new CubyFloatType((float) left + (float) right);
+                    result =  new CubyFloatType(Float.parseFloat(String.valueOf(left)) + Float.parseFloat(String.valueOf(right)));
                 } else {
-                    result = new CubyIntType((int) left + (int) right);
+                    result = new CubyIntType(Integer.parseInt(String.valueOf(left)) + Integer.parseInt(String.valueOf(right)));
                 }
                 break;
             }
             case "-":{
                 if (flag == 1) {
-                    result = new CubyFloatType((float) left - (float) right);
+                    result = new CubyFloatType(Float.parseFloat(String.valueOf(left)) - Float.parseFloat(String.valueOf(right)));
                 } else {
-                    result = new CubyIntType((int) left - (int) right);
+                    result = new CubyIntType(Integer.parseInt(String.valueOf(left)) - Integer.parseInt(String.valueOf(right)));
                 }
                 break;
             }
             case "*":{
                 if (flag == 1) {
-                    result = new CubyFloatType((float) left * (float) right);
+                    result = new CubyFloatType(Float.parseFloat(String.valueOf(left)) * Float.parseFloat(String.valueOf(right)));
                 } else {
-                    result = new CubyIntType((int) left * (int) right);
+                    result = new CubyIntType(Integer.parseInt(String.valueOf(left)) * Integer.parseInt(String.valueOf(right)));
                 }
                 break;
             }
             case "/":{
-                if(Float.compare((float)right, 0.0f) == 0){
+                if(Float.compare(Float.parseFloat(String.valueOf(right)), 0.0f) == 0){
                     throw new OperatorError("OpeatorError: Divisor can't not be zero");
                 }
                 if (flag == 1) {
-                    result = new CubyFloatType((float) left / (float) right);
+                    result = new CubyFloatType(Float.parseFloat(String.valueOf(left)) / Float.parseFloat(String.valueOf(right)));
                 } else {
-                    result = new CubyIntType((int) left / (int) right);
+                    result = new CubyIntType(Integer.parseInt(String.valueOf(left)) / Integer.parseInt(String.valueOf(right)));
                 }
                 break;
             }
@@ -301,7 +301,7 @@ public class Machine {
                 if (flag == 1) {
                     throw new OperatorError("OpeatorError: Float can't mod");
                 } else {
-                    result = new CubyIntType((int) left % (int) right);
+                    result = new CubyIntType(Integer.parseInt(String.valueOf(left)) % Integer.parseInt(String.valueOf(right)));
                 }
                 break;
             }
@@ -388,6 +388,8 @@ public class Machine {
                 result = ((CubyIntType)stack[i]).getValue();
             }else if(stack[i] instanceof CubyFloatType){
                 result = ((CubyFloatType)stack[i]).getValue();
+            }else if(stack[i] instanceof CubyCharType){
+                result = ((CubyCharType)stack[i]).getValue();
             }
             System.out.print(String.valueOf(result) + " ");
         }

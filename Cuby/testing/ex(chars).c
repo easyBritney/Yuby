@@ -1,6 +1,6 @@
-
-
 int main ()
 {
-    string a="213456";
+    char c = 'h' + 1;
+    print c;
+
 }
