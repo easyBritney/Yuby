@@ -359,6 +359,8 @@ java Machinetrace ex9.out 0
       - PUSHHDLR,保存catch中的异常种类，需要跳转的位置以及hr入栈
       - POPHDLR ，与PUSHHDLR对应
       - THROW   ，用于丢出异常，从hr开始找匹配
+    - 运行时堆栈：  
+        ![](img/ex(exception).png)
 
 
 ## 心得体会
