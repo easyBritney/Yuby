@@ -90,6 +90,7 @@ public class Machine {
         int bp = -999;
         int sp = -1;
         int pc = 0;
+        int hr = -1;
         for (;;) {
             if (trace)
                 printSpPc(stack, bp, sp, program, pc);
@@ -227,9 +228,34 @@ public class Machine {
                     break;
                 case Instruction.STOP:
                     return sp;
+                case Instruction.PUSHHR:{
+                    stack[++sp] = new CubyIntType(program.get(pc++));    //exn
+                    int tmp = sp;       //exn address
+                    sp++;
+                    stack[sp++] = new CubyIntType(program.get(pc++));   //跳跳 address
+                    stack[sp] = new CubyIntType(hr);
+                    hr = tmp;
+                    break;
+                }
+                case Instruction.POPHR:
+                    hr = ((CubyIntType)stack[sp--]).getValue();sp-=2;break;
+                case Instruction.THROW:
+
+                    while (hr != -1 && stack[hr] != stack[sp+1])
+                        hr = ((CubyIntType)stack[hr+2]).getValue(); //find exn address
+                    if (hr != -1) { // Found a handler for exn
+                        pc = ((CubyIntType)stack[hr+1]).getValue();
+                        hr = ((CubyIntType)stack[hr+2]).getValue(); // with current handler being hr
+                        sp = hr-1;    // remove stack after hr
+                    } else {
+                        System.out.print("not find exception");
+                        return sp;
+                    }break;
+
                 default:
                     throw new RuntimeException("Illegal instruction " + program.get(pc-1)
                             + " at address " + (pc-1));
+
             }
 
 
@@ -375,6 +401,9 @@ public class Machine {
             case Instruction.PRINTC: return "PRINTC";
             case Instruction.LDARGS: return "LDARGS";
             case Instruction.STOP:   return "STOP";
+            case Instruction.THROW:  return "THROW" + program.get(pc+1);
+            case Instruction.PUSHHR: return "PUSHHR" + " " + program.get(pc+ 1) + " " + program.get(pc+2) + " " + program.get(pc + 3);
+            case Instruction.POPHR: return "POPHR";
             default:     return "<unknown>";
         }
     }
