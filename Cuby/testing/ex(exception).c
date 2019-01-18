@@ -1,12 +1,13 @@
 int main()
 {
     try{
-        int a=0;
-        int n;
-        n=7/a;
+        int a=1;
+        int n=33;
+        n=a/0;
     }
     catch("ArithmeticalExcption")
     {
-        //n=0;
-    }
+        n=0;
+        //print n;
+    }   
 }

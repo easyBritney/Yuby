@@ -174,25 +174,23 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : i
     | Try(stmt,catchs)  ->
         let (labend, C1) = addLabel C
         let lablist = labend :: lablist
+        let (tryins,varEnv) = tryStmt stmt varEnv funEnv lablist []
         let rec everycatch c  = 
             match c with
             | [Catch(exn,body)] -> 
                 let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
-                let Cpop = POPHDLR :: C1
-                let C2= cStmt body varEnv funEnv lablist Cpop 
-                let (label, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labend :: C2))
-                let C4 = PUSHHDLR (1 ,label) :: C3
-                (label,C4)
+                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist [])
+                let Ctry = PUSHHDLR (exnum ,label) :: tryins //@ [POPHDLR]
+                (Ccatch,Ctry)
             | Catch(exn,body) :: tr->
                 let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
-                let (labnext,C2) = everycatch tr
-                let C3 = cStmt body varEnv funEnv lablist (POPHDLR :: C2)
-                let (label, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labnext :: C2))
-                let C5 = PUSHHDLR (1,label) :: C4
-                (label,C5)
-            | [] -> (labend, C1)
-        let (label,C2) = everycatch catchs
-        C2
+                let (C2,C3) = everycatch tr
+                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist C2)
+                let Ctry = PUSHHDLR (exnum,label) :: C3 @ [POPHDLR]
+                (Ccatch,Ctry)
+            | [] -> ([],tryins)
+        let (Ccatch,Ctry) = everycatch catchs
+        Ctry @ Ccatch @ C1
     | Catch(exn,body)       ->
         C
     | DoWhile(body, e) ->
@@ -248,7 +246,23 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : i
         let lablist   = dellab lablist
         let labbegin = headlab lablist
         addGOTO labbegin C
-
+and tryStmt tryBlock (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : instruction list) : instruction list * VarEnv = 
+    match tryBlock with
+    | Block stmts ->
+        let rec pass1 stmts ((_, fdepth) as varEnv) = 
+            match stmts with
+            | []        -> ([], fdepth,varEnv)
+            | s1::sr    ->
+                let (_, varEnv1) as res1 = bStmtordec s1 varEnv
+                let (resr, fdepthr,varEnv2) = pass1 sr varEnv1
+                (res1 :: resr, fdepthr,varEnv2)
+        let (stmtsback, fdepthend,varEnv1) = pass1 stmts varEnv
+        let rec pass2 pairs C =
+            match pairs with
+            | [] -> C            
+            | (BDec code, varEnv)  :: sr -> code @ pass2 sr C
+            | (BStmt stmt, varEnv) :: sr -> cStmt stmt varEnv funEnv lablist (pass2 sr C)
+        (pass2 stmtsback (addINCSP(snd varEnv - fdepthend) C),varEnv1)
 and bStmtordec stmtOrDec varEnv : bstmtordec * VarEnv =
     match stmtOrDec with
     | Statement stmt    ->
@@ -304,8 +318,9 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
                         match C1 with
                         | a :: tr -> a
                         | []-> failwith "Error: empty ins"
-                    if head C = CSTI 0 then THROW 1 :: (addINCSP -1 C)
-                    else   DIV  ::  C
+                    THROW 1 :: (addINCSP -1 C)
+                    // if head C = CSTI 0 then THROW 1 :: (addINCSP -1 C)
+                    // else   DIV  ::  C
                 | "%"   -> MOD  ::  C
                 | "=="  -> EQ   ::  C
                 | "!="  -> EQ   ::  addNOT C
