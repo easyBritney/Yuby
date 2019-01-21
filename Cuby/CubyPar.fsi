@@ -129,6 +129,7 @@ type nonTerminalId =
     | NONTERM_Main
     | NONTERM_TopDeclares
     | NONTERM_TopDeclare
+    | NONTERM_StructDeclare
     | NONTERM_MemberDefList
     | NONTERM_VariableDeclare
     | NONTERM_VariableDeclareAndAssign

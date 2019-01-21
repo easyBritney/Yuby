@@ -98,8 +98,11 @@ let rec lookup env x =
 type Var = 
     | Glovar of int
     | Locvar of int
+    | StructMemberLoc of int
 
 type VarEnv = (Var * IPrimitiveType) Env * int
+
+type StructTypeEnv = (string * (Var * IPrimitiveType) Env * int) list 
 
 type Paramdecs = (IPrimitiveType * string) list
 
@@ -108,7 +111,7 @@ type FunEnv = (label * IPrimitiveType option * Paramdecs) Env
 type LabEnv = label list
 
 
-let allocate (kind : int -> Var) (typ, x) (varEnv : VarEnv) : VarEnv * instruction list =
+let allocate (kind : int -> Var) (typ, x) (varEnv : VarEnv) : VarEnv *  instruction list =
     let (env, fdepth) = varEnv
     match typ with
     | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
@@ -352,24 +355,70 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
     // | AccessMember (_, _)
 
 
-and makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * instruction list =
-    let rec addv decs varEnv funEnv =
+and structAllocateDef(kind : int -> Var) (structName : string) (typ : IPrimitiveType) (varName : string) (structTypEnv : StructTypeEnv) : StructTypeEnv = 
+    match structTypEnv with
+    | lhs :: rhs ->
+        let (name, env, depth) = lhs
+        if name = structName 
+        then 
+            match typ with
+            | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
+            | TypeArray (t, Some i)         ->
+                let newEnv = ((varName, (kind (depth+i), typ)) :: env)
+                (name, newEnv, depth + i) :: rhs
+            | _ ->
+                let newEnv = ((varName, (kind (depth+1), typ)) :: env)
+                (name, newEnv, depth + 1) :: rhs
+        else structAllocateDef kind structName typ varName rhs
+    | [] -> 
+        match typ with
+            | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
+            | TypeArray (t, Some i)         ->
+                let newEnv = [(varName, (kind (i), typ))]
+                (structName, newEnv, i) :: structTypEnv
+            | _ ->
+                let newEnv = [(varName, (kind (0), typ))]
+                (structName, newEnv, 0) :: structTypEnv
+
+
+
+and makeStructEnvs(structName : string) (structEntry :(IPrimitiveType * string) list ) (structTypEnv : StructTypeEnv) : StructTypeEnv = 
+    let rec addm structName structEntry structTypEnv = 
+        match structEntry with
+        | [] -> structTypEnv
+        | lhs::rhs ->
+            match lhs with
+            | (typ, name)   -> 
+                let structTypEnv1 = structAllocateDef StructMemberLoc structName typ name structTypEnv
+                let structTypEnvr = addm structName rhs structTypEnv1
+                structTypEnvr
+
+    addm structName structEntry structTypEnv
+    
+and makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * StructTypeEnv * instruction list =
+    let rec addv decs varEnv funEnv structTypEnv =
         match decs with
-        | [] -> (varEnv, funEnv, [])
+        | [] -> (varEnv, funEnv, structTypEnv, [])
         | dec::decr ->
             match dec with
             | VariableDeclare (typ, x) -> 
-                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
-                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
-                (varEnvr, funEnvr, code1 @ coder)
+                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv 
+                let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv1 funEnv structTypEnv
+                (varEnvr, funEnvr, structTypEnvr, code1 @ coder)
             | VariableDeclareAndAssign (typ, x, e) -> 
-                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv
-                let (varEnvr, funEnvr, coder) = addv decr varEnv1 funEnv
-                (varEnvr, funEnvr, code1 @ (cAccess (AccessVariable(x)) varEnvr funEnvr [] (cExpr e varEnvr funEnvr [] (STI :: (addINCSP -1 coder)))))
+                let (varEnv1, code1) = allocate Glovar (typ, x) varEnv 
+                let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv1 funEnv structTypEnv
+                (varEnvr, funEnvr, structTypEnvr, code1 @ (cAccess (AccessVariable(x)) varEnvr funEnvr [] (cExpr e varEnvr funEnvr [] (STI :: (addINCSP -1 coder)))))
             | FunctionDeclare (tyOpt, f, xs, body) ->
-                addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv)
-            
-    addv topdecs ([], 0) []
+                addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv) structTypEnv
+            | StructDeclare (typName, typEntry) -> 
+                let structTypEnv1 = makeStructEnvs typName typEntry structTypEnv
+                let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv funEnv structTypEnv1
+                (varEnvr, funEnvr, structTypEnvr, coder)
+                
+    addv topdecs ([], 0) [] []
+
+
 and cAccess access varEnv funEnv lablist C =
     match access with
     | AccessVariable x  ->
@@ -399,7 +448,7 @@ and callfun f es varEnv funEnv lablist C : instruction list =
 
 let cProgram (Prog topdecs) : instruction list = 
     let _ = resetLabels ()
-    let ((globalVarEnv, _), funEnv, globalInit) = makeGlobalEnvs topdecs
+    let ((globalVarEnv, _), funEnv, structEnv, globalInit) = makeGlobalEnvs topdecs
     let compilefun (tyOpt, f, xs, body) = 
         let (labf, _, paras)    = lookup funEnv f
         let (envf, fdepthf)     = bindParams paras (globalVarEnv, 0)
@@ -411,7 +460,8 @@ let cProgram (Prog topdecs) : instruction list =
                         | FunctionDeclare (rTy, name, argTy, body)
                                             ->  Some (compilefun (rTy, name, argTy, body))
                         | VariableDeclare _ -> None
-                        | VariableDeclareAndAssign _ -> None)
+                        | VariableDeclareAndAssign _ -> None
+                        | StructDeclare _ -> None)
                         topdecs
     let (mainlab, _, mainparams) = lookup funEnv "main"
     let argc = List.length mainparams

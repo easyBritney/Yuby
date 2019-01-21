@@ -59,18 +59,19 @@ TopDeclares:
 TopDeclare: 
     VariableDeclare SEMI                { VariableDeclare(fst $1, snd $1) }
   | VariableDeclareAndAssign SEMI       { VariableDeclareAndAssign(first $1, second $1 , third $1)  }
+  | StructDeclare SEMI                  { StructDeclare(fst $1,snd $1) }
   | FunctionDeclare                     { $1 }
 ;
 
-// StructDeclare:
-//  | STRUCT NAME LBRACE MemberDefList RBRACK SEMI      { $2 $}
-//  | STRUCT NAME LBRACE MemberDefList RBRACK NAME SEMI
-
+StructDeclare:
+  | STRUCT NAME LBRACE MemberDefList RBRACE         { ($2, $4) }
+//  | STRUCT NAME LBRACE MemberDefList RBRACE NAME SEMI
+;
 
 
 MemberDefList:
     /* empty */ { [] }
-    | VariableDeclare MemberDefList { $1 :: $2 }
+    | VariableDeclare SEMI MemberDefList { $1 :: $3 }
 ;
 
 
@@ -233,6 +234,8 @@ ConstFloat:
 
 ConstChar:
   CSTCHAR                               { $1       }
+
+
 Type:
     INT                                 { TypeInt      }
   | CHAR                                { TypeChar     }

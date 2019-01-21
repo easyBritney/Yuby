@@ -62,6 +62,7 @@ and StatementORDeclare =
 and TopDeclare =
     | FunctionDeclare of IPrimitiveType option * string * (IPrimitiveType * string) list * IStatement
     | VariableDeclare of IPrimitiveType * string 
+    | StructDeclare of  string * (IPrimitiveType * string) list 
     | VariableDeclareAndAssign of IPrimitiveType * string * IExpression
 
 and Program = 
