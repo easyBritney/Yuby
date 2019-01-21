@@ -118,8 +118,29 @@ public class Machine {
                     break;
                 }
                 case Instruction.DIV:
-                    stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "/");
-                    sp--;
+                    if(((CubyIntType)stack[sp]).getValue()==0)
+                    {
+                        System.out.println("hr:"+hr+" exception:"+1);
+                        while (hr != -1 && ((CubyIntType)stack[hr]).getValue() != 1 )
+                        {
+                            hr = ((CubyIntType)stack[hr+2]).getValue();
+                            System.out.println("hr:"+hr+" exception:"+new CubyIntType(program.get(pc)).getValue());
+                        }
+                            
+                        if (hr != -1) { 
+                            sp = hr-1;    
+                            pc = ((CubyIntType)stack[hr+1]).getValue();
+                            hr = ((CubyIntType)stack[hr+2]).getValue();    
+                        } else {
+                            System.out.print(hr+"not find exception");
+                            return sp;
+                        }
+                    }
+                    else{
+                        stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "/");
+                        sp--; 
+                    }
+                    
                     break;
                 case Instruction.MOD:
                     stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "%");

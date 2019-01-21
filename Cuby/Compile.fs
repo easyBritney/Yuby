@@ -172,18 +172,25 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : i
     | Case(cond,body)  ->
         C
     | Try(stmt,catchs)  ->
+        let exns = [Exception "ArithmeticalExcption"]
+        let rec lookupExn e1 (es:IException list) exdepth=
+            match es with
+            | hd :: tail -> if e1 = hd then exdepth else lookupExn e1 tail exdepth+1
+            | []-> -1
         let (labend, C1) = addLabel C
         let lablist = labend :: lablist
+        let (env,fdepth) = varEnv
+        let varEnv = (env,fdepth+3*catchs.Length)
         let (tryins,varEnv) = tryStmt stmt varEnv funEnv lablist []
         let rec everycatch c  = 
             match c with
             | [Catch(exn,body)] -> 
-                let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
+                let exnum = lookupExn exn exns 1
                 let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist [])
-                let Ctry = PUSHHDLR (exnum ,label) :: tryins //@ [POPHDLR]
+                let Ctry = PUSHHDLR (exnum ,label) :: tryins @ [POPHDLR]
                 (Ccatch,Ctry)
             | Catch(exn,body) :: tr->
-                let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
+                let exnum = lookupExn exn exns 1
                 let (C2,C3) = everycatch tr
                 let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist C2)
                 let Ctry = PUSHHDLR (exnum,label) :: C3 @ [POPHDLR]
@@ -318,9 +325,8 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
                         match C1 with
                         | a :: tr -> a
                         | []-> failwith "Error: empty ins"
-                    THROW 1 :: (addINCSP -1 C)
-                    // if head C = CSTI 0 then THROW 1 :: (addINCSP -1 C)
-                    // else   DIV  ::  C
+                    if head C = CSTI 0 then THROW 1 :: (addINCSP -1 C)
+                    else   DIV  ::  C
                 | "%"   -> MOD  ::  C
                 | "=="  -> EQ   ::  C
                 | "!="  -> EQ   ::  addNOT C
