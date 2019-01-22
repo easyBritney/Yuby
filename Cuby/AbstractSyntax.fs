@@ -6,7 +6,7 @@ type IPrimitiveType =
     | TypeString    (**)
     | TypeFloat     (**)
     | TypeVoid      (**)
-    | TypeStruct of IPrimitiveType list
+    | TypeStruct of string
     | TypeArray of IPrimitiveType * int option
     | TypePoint of IPrimitiveType
     | Lambda of IPrimitiveType option * (IPrimitiveType * string) list * IStatement (*匿名*)

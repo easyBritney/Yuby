@@ -5,6 +5,6 @@ struct student{
 };
 
 int main(){
-    int a[10];
-    print 1;
+    int i ;
+    struct student a;
 }

@@ -65,7 +65,8 @@ TopDeclare:
 
 StructDeclare:
   | STRUCT NAME LBRACE MemberDefList RBRACE         { ($2, $4) }
-//  | STRUCT NAME LBRACE MemberDefList RBRACE NAME SEMI
+//  | STRUCT NAME LBRACE MemberDefList RBRACE NAME
+//  | STRUCT NAME VariableDeclare SEMI                
 ;
 
 
@@ -241,4 +242,5 @@ Type:
   | CHAR                                { TypeChar     }
   | STRING                              { TypeString   }
   | FLOAT                               { TypeFloat    }
+  | STRUCT  NAME                        { TypeStruct($2) }
 ;
