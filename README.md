@@ -372,21 +372,21 @@ java Machinetrace ex9.out 0
       - THROW   ，用于丢出异常，从hr开始找匹配
     - 例子：
   - 目前做了有关除0异常的内容，由于没有异常类，暂且通过字符串的方式作为异常种类，将异常编号匹配。解决了运行时try-catch变量环境的问题，解决了异常处理时栈环境变化带来的空间影响。能够正常的匹配到异常。
-```C
-int main()
-{
-    try{
-        int a=0;
-        int n=5;
-        n=n/a;
-    }
-    catch("ArithmeticalExcption")
-    {
-        n=0;
-        print n;
-    }   
-}
-```
+    ```C
+        int main()
+        {
+            try{
+                int a=0;
+                int n=5;
+                n=n/a;
+            }
+            catch("ArithmeticalExcption")
+            {
+                n=0;
+                print n;
+            }   
+        }
+    ```
     - 运行时堆栈：  
 
 - ![](img/ex(exception).png)
