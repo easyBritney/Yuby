@@ -4,7 +4,7 @@ public class CubyCharType extends CubyBaseType {
     private char value;
 
     CubyCharType(){
-
+        value = 0;
     }
 
     public CubyCharType(char c){

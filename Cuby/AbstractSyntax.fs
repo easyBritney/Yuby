@@ -6,7 +6,7 @@ type IPrimitiveType =
     | TypeString    (**)
     | TypeFloat     (**)
     | TypeVoid      (**)
-    | TypeStruct of IPrimitiveType list
+    | TypeStruct of string
     | TypeArray of IPrimitiveType * int option
     | TypePoint of IPrimitiveType
     | Lambda of IPrimitiveType option * (IPrimitiveType * string) list * IStatement (*匿名*)
@@ -32,7 +32,7 @@ and IAccess =
     | AccessVariable of string
     | AccessDeclareReference of IExpression
     | AccessIndex of IAccess * IExpression
-    | AccessMember of IAccess * string  (**)
+    | AccessMember of IAccess * IAccess  (**)
 
 and IStatement =
     | If of IExpression * IStatement * IStatement
@@ -62,6 +62,7 @@ and StatementORDeclare =
 and TopDeclare =
     | FunctionDeclare of IPrimitiveType option * string * (IPrimitiveType * string) list * IStatement
     | VariableDeclare of IPrimitiveType * string 
+    | StructDeclare of  string * (IPrimitiveType * string) list 
     | VariableDeclareAndAssign of IPrimitiveType * string * IExpression
 
 and Program = 
