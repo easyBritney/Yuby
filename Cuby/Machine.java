@@ -35,8 +35,8 @@ class Machine {
     GOTO = 16, IFZERO = 17, IFNZRO = 18, CALL = 19, TCALL = 20, RET = 21, 
     PRINTI = 22, PRINTC = 23, 
     LDARGS = 24,
-    STOP = 25;
-    FLOAT = 26, CHAR = 27, THROW 28, PUSHHR 29, POPHR 30;
+    STOP = 25,
+    CSTF = 26, CSTC = 27, THROW = 28, PUSHHR = 29, POPHR = 30;
 
   final static int STACKSIZE = 1000;
   
@@ -77,7 +77,23 @@ class Machine {
       case MUL: 
         s[sp-1] = s[sp-1] * s[sp]; sp--; break;
       case DIV: 
-        s[sp-1] = s[sp-1] / s[sp]; sp--; break;
+        if(s[sp]==0)
+        {
+          while (hr != -1 && s[hr] != 1)
+            hr = s[hr+2]; 
+          if (hr != -1) {
+            pc = s[hr+1]; 
+            hr = s[hr+2];
+            sp = hr-1;
+          } else {
+            System.out.print("not find exception");
+            return sp;
+          }
+        }
+        else{
+          s[sp-1] = s[sp-1] / s[sp]; sp--;
+        }
+        break;
       case MOD: 
         s[sp-1] = s[sp-1] % s[sp]; sp--; break;
       case EQ: 
@@ -113,7 +129,7 @@ class Machine {
         while (hr != -1 && s[hr] != exn)
           hr = s[hr+2]; //find exn address
         if (hr != -1) { // Found a handler for exn
-          pc = s[hr+1]; // execute the handler code (a)
+          pc = s[hr+1]; 
           hr = s[hr+2]; // with current handler being hr
           sp = hr-1;    // remove stack after hr
         } else {
@@ -197,6 +213,9 @@ class Machine {
     case PRINTC: return "PRINTC";
     case LDARGS: return "LDARGS";
     case STOP:   return "STOP";
+    case POPHR:  return "POPHR";
+    case THROW:  return "THROW "+ p[pc+1];
+    case PUSHHR: return "PUSHHR "+p[pc+1]+" "+p[pc+2]+" "+p[pc+3];
     default:     return "<unknown>";
     }
   }

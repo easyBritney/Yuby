@@ -118,8 +118,29 @@ public class Machine {
                     break;
                 }
                 case Instruction.DIV:
-                    stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "/");
-                    sp--;
+                    if(((CubyIntType)stack[sp]).getValue()==0)
+                    {
+                        System.out.println("hr:"+hr+" exception:"+1);
+                        while (hr != -1 && ((CubyIntType)stack[hr]).getValue() != 1 )
+                        {
+                            hr = ((CubyIntType)stack[hr+2]).getValue();
+                            System.out.println("hr:"+hr+" exception:"+new CubyIntType(program.get(pc)).getValue());
+                        }
+                            
+                        if (hr != -1) { 
+                            sp = hr-1;    
+                            pc = ((CubyIntType)stack[hr+1]).getValue();
+                            hr = ((CubyIntType)stack[hr+2]).getValue();    
+                        } else {
+                            System.out.print(hr+"not find exception");
+                            return sp;
+                        }
+                    }
+                    else{
+                        stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "/");
+                        sp--; 
+                    }
+                    
                     break;
                 case Instruction.MOD:
                     stack[sp - 1] = binaryOperator(stack[sp-1], stack[sp], "%");
@@ -140,7 +161,7 @@ public class Machine {
                     }else if (stack[sp] instanceof CubyIntType){
                         result = ((CubyIntType)stack[sp]).getValue();
                     }
-                    stack[sp] = (Float.compare((float)result, 0.0f) == 0 ? new CubyIntType(1) : new CubyIntType(0));
+                    stack[sp] = (Float.compare(new Float(result.toString()), 0.0f) == 0 ? new CubyIntType(1) : new CubyIntType(0));
                     break;
                 }
                 case Instruction.DUP:
@@ -232,7 +253,7 @@ public class Machine {
                     stack[++sp] = new CubyIntType(program.get(pc++));    //exn
                     int tmp = sp;       //exn address
                     sp++;
-                    stack[sp++] = new CubyIntType(program.get(pc++));   //跳跳 address
+                    stack[sp++] = new CubyIntType(program.get(pc++));   //jump address
                     stack[sp] = new CubyIntType(hr);
                     hr = tmp;
                     break;
@@ -240,15 +261,20 @@ public class Machine {
                 case Instruction.POPHR:
                     hr = ((CubyIntType)stack[sp--]).getValue();sp-=2;break;
                 case Instruction.THROW:
+                    System.out.println("hr:"+hr+" exception:"+new CubyIntType(program.get(pc)).getValue());
 
-                    while (hr != -1 && stack[hr] != stack[sp+1])
+                    while (hr != -1 && ((CubyIntType)stack[hr]).getValue() != program.get(pc) )
+                    {
                         hr = ((CubyIntType)stack[hr+2]).getValue(); //find exn address
+                        System.out.println("hr:"+hr+" exception:"+new CubyIntType(program.get(pc)).getValue());
+                    }
+                        
                     if (hr != -1) { // Found a handler for exn
-                        pc = ((CubyIntType)stack[hr+1]).getValue();
-                        hr = ((CubyIntType)stack[hr+2]).getValue(); // with current handler being hr
                         sp = hr-1;    // remove stack after hr
+                        pc = ((CubyIntType)stack[hr+1]).getValue();
+                        hr = ((CubyIntType)stack[hr+2]).getValue(); // with current handler being hr     
                     } else {
-                        System.out.print("not find exception");
+                        System.out.print(hr+"not find exception");
                         return sp;
                     }break;
 
@@ -403,7 +429,7 @@ public class Machine {
             case Instruction.LDARGS: return "LDARGS";
             case Instruction.STOP:   return "STOP";
             case Instruction.THROW:  return "THROW" + program.get(pc+1);
-            case Instruction.PUSHHR: return "PUSHHR" + " " + program.get(pc+ 1) + " " + program.get(pc+2) + " " + program.get(pc + 3);
+            case Instruction.PUSHHR: return "PUSHHR" + " " + program.get(pc+ 1) + " " + program.get(pc+2) ;
             case Instruction.POPHR: return "POPHR";
             default:     return "<unknown>";
         }

@@ -173,7 +173,7 @@ let makelabenv (addr, labenv) instruction =
     | LDARGS            -> (addr+1, labenv)
     | STOP              -> (addr+1, labenv)
     | THROW i           -> (addr+2, labenv)
-    | PUSHHDLR (exn ,lab) -> (addr+2, labenv)
+    | PUSHHDLR (exn ,lab) -> (addr+3, labenv)
     | POPHDLR           -> (addr+1, labenv)
 
 
