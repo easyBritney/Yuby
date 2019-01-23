@@ -111,7 +111,7 @@ let rec structLookupVar env x lastloc =
     | (name, (loc, typ))::rhs         -> 
         if x = name then 
             match typ with
-            | TypeArray (_, _)  -> StructMemberLoc (lastloc + 1)
+            | TypeArray (_, _)  -> StructMemberLoc (lastloc+1)
             | _                 -> loc 
         else
         match loc with
@@ -404,10 +404,10 @@ and structAllocateDef(kind : int -> Var) (structName : string) (typ : IPrimitive
             match typ with
             | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
             | TypeArray (t, Some i)         ->
-                let newEnv = ((varName, (kind (depth+i), typ)) :: env)
+                let newEnv = env @ [(varName, (kind (depth+i), typ))]
                 (name, newEnv, depth + i) :: rhs
             | _ ->
-                let newEnv = ((varName, (kind (depth+1), typ)) :: env)
+                let newEnv = env @ [(varName, (kind (depth+1), typ))] 
                 (name, newEnv, depth + 1) :: rhs
         else structAllocateDef kind structName typ varName rhs
     | [] -> 
@@ -472,11 +472,15 @@ and cAccess access varEnv funEnv lablist (structEnv : StructTypeEnv) C =
         | StructMemberLoc varLocate ->
             match lookup (fst varEnv) stru with
             | Glovar addr, _ -> addCST (addr - (size+1) + varLocate) C
-            | Locvar addr, _ -> GETBP :: addCST (addr - (size+1) + varLocate) (ADD :: C)
+            | Locvar addr, _ -> GETBP :: addCST (addr - (size+1) + varLocate) (ADD ::  C)
     | AccessDeclareReference e ->
         cExpr e varEnv funEnv lablist structEnv C
     | AccessIndex(acc, idx)    ->
-        cAccess acc varEnv funEnv lablist structEnv (LDI :: cExpr idx varEnv funEnv lablist structEnv (ADD :: C))
+        match acc with
+        | AccessMember (AccessVariable stru, AccessVariable memb) ->
+            cAccess acc varEnv funEnv lablist structEnv (cExpr idx varEnv funEnv lablist structEnv (ADD :: C))
+        | _     ->   
+            cAccess acc varEnv funEnv lablist structEnv (LDI :: cExpr idx varEnv funEnv lablist structEnv (ADD :: C))
 
 
 and cExprs es varEnv funEnv lablist (structEnv : StructTypeEnv) C = 
