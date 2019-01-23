@@ -95,15 +95,30 @@ let rec lookup env x =
     | []            -> failwith(x + " not found")
     | (y, v)::yr    -> if x=y then v else lookup yr x
 
-let rec structlookup env x =
+let rec structLookup env x =
     match env with
     | []                            -> failwith(x + " not found")
-    | (name, arglist, size)::rhs    -> if x = name then (arglist, size) else structlookup rhs x
+    | (name, arglist, size)::rhs    -> if x = name then (name, arglist, size) else structLookup rhs x
+
 
 type Var = 
     | Glovar of int
     | Locvar of int
     | StructMemberLoc of int
+let rec structLookupVar env x lastloc =
+    match env with
+    | []                            -> failwith(x + " not found")
+    | (name, (loc, typ))::rhs         -> 
+        if x = name then 
+            match typ with
+            | TypeArray (_, _)  -> StructMemberLoc (lastloc + 1)
+            | _                 -> loc 
+        else
+        match loc with
+        | StructMemberLoc lastloc1 -> structLookupVar rhs x lastloc1
+
+
+
 
 type VarEnv = (Var * IPrimitiveType) Env * int
 
@@ -125,25 +140,26 @@ let allocate (kind : int -> Var) (typ, x) (varEnv : VarEnv) (structEnv : StructT
         let code = [INCSP i; GETSP; CSTI (i-1); SUB]
         (newEnv, code)
     | TypeStruct structName     ->
-        let (argslist, size) = structlookup structEnv structName
-        let rec traverse args env = 
-            match args with
-            | []        ->      env
-            | (varName, (_, structTyp)):: rhs   ->  
-                match structTyp with
-                | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
-                | TypeArray (t, Some i)         ->
-                    let newEnv = (x, (kind (fdepth+i), structTyp)) :: env
-                    let newEnv1 = traverse rhs newEnv
-                    newEnv1
-                | _     ->
-                    let newEnv = (x, (kind (fdepth), structTyp)) :: env
-                    let newEnv1 = traverse rhs newEnv
-                    newEnv1
+        let (name, argslist, size) = structLookup structEnv structName
+        // let rec traverse args envir = 
+        //     match args with
+        //     | []        ->      envir
+        //     | (varName, (_, structTyp)):: rhs   ->  
+        //         match structTyp with
+        //         | TypeArray (TypeArray _, _)    -> failwith "Warning: allocate-arrays of arrays not permitted" 
+        //         | TypeArray (t, Some i)         ->
+        //             let newEnv = (x, (kind (fdepth+i), structTyp)) :: envir
+        //             let newEnv1 = traverse rhs newEnv
+        //             newEnv1
+        //         | _     ->
+        //             let newEnv = (x, (kind (fdepth), structTyp)) :: envir
+        //             let newEnv1 = traverse rhs newEnv
+        //             newEnv1
 
         let code = [INCSP (size + 1); GETSP; CSTI (size); SUB]
-        let newEnvr = traverse argslist env
-        ((newEnvr,fdepth + size + 1), code)
+        // let newEnvr = traverse argslist env
+        let newEnvr = ((x, (kind (fdepth + size + 1), typ)) :: env, fdepth+size+1+1)
+        (newEnvr, code)
     | _     ->
         let newEnv = ((x, (kind (fdepth), typ)) :: env, fdepth+1)
         let code = [INCSP 1]
@@ -171,13 +187,13 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
     | If(e, stmt1, stmt2) ->
         let (jumpend, C1) = makeJump C
         let (labelse, C2) = addLabel (cStmt stmt2 varEnv funEnv lablist structEnv C1)
-        cExpr e varEnv funEnv lablist (IFZERO labelse :: cStmt stmt1 varEnv funEnv lablist structEnv (addJump jumpend C2))
+        cExpr e varEnv funEnv lablist structEnv (IFZERO labelse :: cStmt stmt1 varEnv funEnv lablist structEnv (addJump jumpend C2))
     | While(e, body) ->
         let labbegin = newLabel()
         let (labend,Cend)   = addLabel C
         let lablist = labend :: labbegin :: lablist
         let (jumptest, C1) = 
-            makeJump (cExpr e varEnv funEnv lablist (IFNZRO labbegin :: Cend))
+            makeJump (cExpr e varEnv funEnv lablist structEnv (IFNZRO labbegin :: Cend))
         addJump jumptest (Label labbegin :: cStmt body varEnv funEnv lablist structEnv C1)
 
     | Switch(e,cases)   ->
@@ -187,12 +203,12 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
             match c with
             | [Case(cond,body)] -> 
                 let (label,C2) = addLabel(cStmt body varEnv funEnv lablist structEnv C1 )
-                let (label2, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv lablist (IFZERO labend :: C2))
+                let (label2, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv lablist structEnv (IFZERO labend :: C2))
                 (label,label2,C3)
             | Case(cond,body) :: tr->
                 let (labnextbody,labnext,C2) = everycase tr
                 let (label, C3) = addLabel(cStmt body varEnv funEnv lablist structEnv (addGOTO labnextbody C2))
-                let (label2, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv lablist (IFZERO labnext :: C3))
+                let (label2, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("==",e,cond)) varEnv funEnv lablist structEnv (IFZERO labnext :: C3))
                 (label,label2,C4)
             | [] -> (labend, labend,C1)
         let (label,label2,C2) = everycase cases
@@ -208,14 +224,14 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
                 let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
                 let Cpop = POPHDLR :: C1
                 let C2= cStmt body varEnv funEnv lablist structEnv Cpop 
-                let (label, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labend :: C2))
+                let (label, C3) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist structEnv (IFZERO labend :: C2))
                 let C4 = PUSHHDLR (1 ,label) :: C3
                 (label,C4)
             | Catch(exn,body) :: tr->
                 let exnum = (if exn = (Exception "ArithmeticalExcption") then 1 else -1)
                 let (labnext,C2) = everycatch tr
                 let C3 = cStmt body varEnv funEnv lablist structEnv (POPHDLR :: C2)
-                let (label, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist (IFZERO labnext :: C2))
+                let (label, C4) = addLabel( cExpr (BinaryPrimitiveOperator ("!=",ConstInt exnum,ConstInt -1)) varEnv funEnv lablist structEnv (IFZERO labnext :: C2))
                 let C5 = PUSHHDLR (1,label) :: C4
                 (label,C5)
             | [] -> (labend, C1)
@@ -226,7 +242,7 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
     | DoWhile(body, e) ->
         let labbegin = newLabel()
         let C1 = 
-            cExpr e varEnv funEnv lablist (IFNZRO labbegin :: C)
+            cExpr e varEnv funEnv lablist structEnv (IFNZRO labbegin :: C)
         Label labbegin :: cStmt body varEnv funEnv lablist structEnv C1 //先执行body
     | For(dec, e, opera,body) ->
         let labend   = newLabel()                       //结束label
@@ -235,10 +251,10 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
         let lablist = labend :: labope :: lablist
         let Cend = Label labend :: C
         let (jumptest, C2) =                                                
-            makeJump (cExpr e varEnv funEnv lablist (IFNZRO labbegin :: Cend)) 
-        let C3 = Label labope :: cExpr opera varEnv funEnv lablist (addINCSP -1 C2)
+            makeJump (cExpr e varEnv funEnv lablist structEnv (IFNZRO labbegin :: Cend)) 
+        let C3 = Label labope :: cExpr opera varEnv funEnv lablist structEnv (addINCSP -1 C2)
         let C4 = cStmt body varEnv funEnv lablist structEnv C3    
-        cExpr dec varEnv funEnv lablist (addINCSP -1 (addJump jumptest  (Label labbegin :: C4) ) ) //dec Label: body  opera  testjumpToBegin 指令的顺序
+        cExpr dec varEnv funEnv lablist structEnv (addINCSP -1 (addJump jumptest  (Label labbegin :: C4) ) ) //dec Label: body  opera  testjumpToBegin 指令的顺序
 // compileToFile (fromFile "testing/ex(for).c ") "testing/ex(for).out";;     
     | Range(dec,i1,i2,body) ->
         let rec tmp stat =
@@ -249,7 +265,7 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
         let opera = Assign (tmp dec, BinaryPrimitiveOperator ("+",Access (tmp dec),ConstInt 1))
         cStmt (For (ass,judge,opera,body))    varEnv funEnv lablist structEnv C
     | Expression e ->
-        cExpr e varEnv funEnv lablist (addINCSP -1 C)
+        cExpr e varEnv funEnv lablist structEnv (addINCSP -1 C)
     | Block stmts ->
         let rec pass1 stmts ((_, fdepth) as varEnv) = 
             match stmts with
@@ -268,7 +284,7 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
     | Return None ->
         RET (snd varEnv - 1) :: deadcode C
     | Return (Some e) ->
-        cExpr e varEnv funEnv lablist (RET (snd varEnv) :: deadcode C)
+        cExpr e varEnv funEnv lablist structEnv (RET (snd varEnv) :: deadcode C)
     | Break ->
         let labend = headlab lablist
         addGOTO labend C
@@ -286,43 +302,43 @@ and bStmtordec stmtOrDec varEnv (structEnv : StructTypeEnv): bstmtordec * VarEnv
         (BDec code, varEnv1)
     | DeclareAndAssign (typ, x, e) ->
         let (varEnv1, code) = allocate Locvar (typ, x) varEnv structEnv
-        (BDec (cAccess (AccessVariable(x)) varEnv1 [] [] (cExpr e varEnv1 [] [] (STI :: (addINCSP -1 code)))), varEnv1)
+        (BDec (cAccess (AccessVariable(x)) varEnv1 [] [] structEnv (cExpr e varEnv1 [] [] structEnv (STI :: (addINCSP -1 code)))), varEnv1)
 
-and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : instruction list) : instruction list =
+and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (structEnv : StructTypeEnv) (C : instruction list) : instruction list =
     match e with
-    | Access acc        -> cAccess acc varEnv funEnv lablist (LDI :: C)
-    | Assign(acc, e)    -> cAccess acc varEnv funEnv lablist (cExpr e varEnv funEnv lablist (STI :: C))
+    | Access acc        -> cAccess acc varEnv funEnv lablist structEnv (LDI :: C)
+    | Assign(acc, e)    -> cAccess acc varEnv funEnv lablist structEnv (cExpr e varEnv funEnv lablist structEnv (STI :: C))
     | ConstInt i        -> addCST i C
     | ConstFloat i      -> addCSTF i C
     | ConstChar i       -> addCSTC i C
-    | Address acc       -> cAccess acc varEnv funEnv lablist C
+    | Address acc       -> cAccess acc varEnv funEnv lablist structEnv C
     | UnaryPrimitiveOperator(ope, e1) ->
         let rec tmp stat =
                     match stat with
                     | Access (c) -> c               //get IAccess
-        cExpr e1 varEnv funEnv lablist
+        cExpr e1 varEnv funEnv lablist structEnv
             (match ope with
             | "!"       -> addNOT C
             | "printi"  -> PRINTI :: C
             | "printc"  -> PRINTC :: C
             | "I++" -> 
                 let ass = Assign (tmp e1,BinaryPrimitiveOperator ("+",Access (tmp e1),ConstInt 1))
-                cExpr ass varEnv funEnv lablist (addINCSP -1 C)
+                cExpr ass varEnv funEnv lablist structEnv (addINCSP -1 C)
             | "I--" ->
                 let ass = Assign (tmp e1,BinaryPrimitiveOperator ("-",Access (tmp e1),ConstInt 1))
-                cExpr ass varEnv funEnv lablist (addINCSP -1 C)
+                cExpr ass varEnv funEnv lablist structEnv (addINCSP -1 C)
             | "++I" -> 
                 let ass = Assign (tmp e1,BinaryPrimitiveOperator ("+",Access (tmp e1),ConstInt 1))
-                let C1 = cExpr ass varEnv funEnv lablist C
+                let C1 = cExpr ass varEnv funEnv lablist structEnv C
                 CSTI 1 :: ADD :: (addINCSP -1 C1)
             | "--I" -> 
                 let ass = Assign (tmp e1,BinaryPrimitiveOperator ("-",Access (tmp e1),ConstInt 1))
-                let C1 = cExpr ass varEnv funEnv lablist C
+                let C1 = cExpr ass varEnv funEnv lablist structEnv C
                 CSTI 1 :: SUB :: (addINCSP -1 C1)
             | _         -> failwith "Error: unknown unary operator")
     | BinaryPrimitiveOperator(ope, e1, e2)    ->
-        cExpr e1 varEnv funEnv lablist
-            (cExpr e2 varEnv funEnv lablist
+        cExpr e1 varEnv funEnv lablist structEnv
+            (cExpr e2 varEnv funEnv lablist structEnv
                 (match ope with
                 | "*"   -> MUL  ::  C
                 | "+"   -> ADD  ::  C
@@ -344,40 +360,39 @@ and cExpr (e : IExpression) (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEn
                 | _     -> failwith "Error: unknown binary operator"))
     | TernaryPrimitiveOperator(cond, e1, e2)    ->
         let (jumpend, C1) = makeJump C
-        let (labelse, C2) = addLabel (cExpr e2 varEnv funEnv lablist C1)
-        cExpr cond varEnv funEnv lablist (IFZERO labelse :: cExpr e1 varEnv funEnv lablist (addJump jumpend C2))
+        let (labelse, C2) = addLabel (cExpr e2 varEnv funEnv lablist structEnv C1)
+        cExpr cond varEnv funEnv lablist structEnv (IFZERO labelse :: cExpr e1 varEnv funEnv lablist structEnv (addJump jumpend C2))
     | AndOperator(e1, e2)   ->
         match C with
         | IFZERO lab :: _ ->
-            cExpr e1 varEnv funEnv lablist (IFZERO lab :: cExpr e2 varEnv funEnv lablist C)
+            cExpr e1 varEnv funEnv lablist structEnv (IFZERO lab :: cExpr e2 varEnv funEnv lablist structEnv C)
         | IFNZRO labthen :: C1 ->
             let (labelse, C2) = addLabel C1
-            cExpr e1 varEnv funEnv lablist
+            cExpr e1 varEnv funEnv lablist structEnv
                 (IFZERO labelse 
-                    :: cExpr e2 varEnv funEnv lablist (IFNZRO labthen :: C2))
+                    :: cExpr e2 varEnv funEnv lablist structEnv (IFNZRO labthen :: C2))
         | _ ->
             let (jumpend, C1)   = makeJump C
             let (labfalse, C2)  = addLabel (addCST 0 C1)
-            cExpr e1 varEnv funEnv lablist
+            cExpr e1 varEnv funEnv lablist structEnv
                 (IFZERO labfalse
-                    :: cExpr e2 varEnv funEnv lablist (addJump jumpend C2))
+                    :: cExpr e2 varEnv funEnv lablist structEnv (addJump jumpend C2))
     | OrOperator(e1, e2)    ->
         match C with
         | IFNZRO lab :: _ ->
-            cExpr e1 varEnv funEnv lablist (IFNZRO lab :: cExpr e2 varEnv funEnv lablist C)
+            cExpr e1 varEnv funEnv lablist structEnv (IFNZRO lab :: cExpr e2 varEnv funEnv lablist structEnv C)
         | IFZERO labthen :: C1 ->
             let(labelse, C2) = addLabel C1
-            cExpr e1 varEnv funEnv lablist
-                (IFNZRO labelse :: cExpr e2 varEnv funEnv lablist
+            cExpr e1 varEnv funEnv lablist structEnv
+                (IFNZRO labelse :: cExpr e2 varEnv funEnv lablist structEnv
                     (IFZERO labthen :: C2))
         | _ ->
             let (jumpend, C1) = makeJump C
             let (labtrue, C2) = addLabel(addCST 1 C1)
-            cExpr e1 varEnv funEnv lablist
+            cExpr e1 varEnv funEnv lablist structEnv
                 (IFNZRO labtrue
-                    :: cExpr e2 varEnv funEnv lablist (addJump jumpend C2))
-    | CallOperator(f, es)   -> callfun f es varEnv funEnv lablist C
-    // | AccessMember (_, _)
+                    :: cExpr e2 varEnv funEnv lablist structEnv (addJump jumpend C2))
+    | CallOperator(f, es)   -> callfun f es varEnv funEnv lablist (structEnv : StructTypeEnv) C
 
 
 and structAllocateDef(kind : int -> Var) (structName : string) (typ : IPrimitiveType) (varName : string) (structTypEnv : StructTypeEnv) : StructTypeEnv = 
@@ -433,7 +448,7 @@ and makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * StructTypeEnv 
             | VariableDeclareAndAssign (typ, x, e) -> 
                 let (varEnv1, code1) = allocate Glovar (typ, x) varEnv structTypEnv
                 let (varEnvr, funEnvr, structTypEnvr, coder) = addv decr varEnv1 funEnv structTypEnv
-                (varEnvr, funEnvr, structTypEnvr, code1 @ (cAccess (AccessVariable(x)) varEnvr funEnvr [] (cExpr e varEnvr funEnvr [] (STI :: (addINCSP -1 coder)))))
+                (varEnvr, funEnvr, structTypEnvr, code1 @ (cAccess (AccessVariable(x)) varEnvr funEnvr [] structTypEnv (cExpr e varEnvr funEnvr [] structTypEnv (STI :: (addINCSP -1 coder)))))
             | FunctionDeclare (tyOpt, f, xs, body) ->
                 addv decr varEnv ((f, (newLabel(), tyOpt, xs)) :: funEnv) structTypEnv
             | StructDeclare (typName, typEntry) -> 
@@ -444,29 +459,37 @@ and makeGlobalEnvs(topdecs : TopDeclare list) : VarEnv * FunEnv * StructTypeEnv 
     addv topdecs ([], 0) [] []
 
 
-and cAccess access varEnv funEnv lablist C =
+and cAccess access varEnv funEnv lablist (structEnv : StructTypeEnv) C =
     match access with
     | AccessVariable x  ->
         match lookup (fst varEnv) x with
         | Glovar addr, _ -> addCST addr C
         | Locvar addr, _ -> GETBP :: addCST addr (ADD :: C)
+    | AccessMember (AccessVariable stru, AccessVariable memb) ->
+        let (loc, TypeStruct structname)   = lookup (fst varEnv) stru
+        let (name, argslist, size) = structLookup structEnv structname
+        match structLookupVar argslist memb 0 with
+        | StructMemberLoc varLocate ->
+            match lookup (fst varEnv) stru with
+            | Glovar addr, _ -> addCST (addr - (size+1) + varLocate) C
+            | Locvar addr, _ -> GETBP :: addCST (addr - (size+1) + varLocate) (ADD :: C)
     | AccessDeclareReference e ->
-        cExpr e varEnv funEnv lablist C
+        cExpr e varEnv funEnv lablist structEnv C
     | AccessIndex(acc, idx)    ->
-        cAccess acc varEnv funEnv lablist (LDI :: cExpr idx varEnv funEnv lablist (ADD :: C))
+        cAccess acc varEnv funEnv lablist structEnv (LDI :: cExpr idx varEnv funEnv lablist structEnv (ADD :: C))
 
 
-and cExprs es varEnv funEnv lablist C = 
+and cExprs es varEnv funEnv lablist (structEnv : StructTypeEnv) C = 
     match es with
     | []        -> C
-    | e1::er    -> cExpr e1 varEnv funEnv lablist (cExprs er varEnv funEnv lablist C)
+    | e1::er    -> cExpr e1 varEnv funEnv lablist structEnv (cExprs er varEnv funEnv lablist structEnv C)
 
 
-and callfun f es varEnv funEnv lablist C : instruction list =
+and callfun f es varEnv funEnv lablist (structEnv : StructTypeEnv) C : instruction list =
     let (labf, tyOpt, paramdecs) = lookup funEnv f
     let argc = List.length es
     if argc = List.length paramdecs then
-        cExprs es varEnv funEnv lablist (makeCall argc labf C)
+        cExprs es varEnv funEnv lablist structEnv (makeCall argc labf C)
     else
         failwith (f + ": parameter/argument mismatch")
 

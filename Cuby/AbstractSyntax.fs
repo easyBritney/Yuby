@@ -32,7 +32,7 @@ and IAccess =
     | AccessVariable of string
     | AccessDeclareReference of IExpression
     | AccessIndex of IAccess * IExpression
-    | AccessMember of IAccess * string  (**)
+    | AccessMember of IAccess * IAccess  (**)
 
 and IStatement =
     | If of IExpression * IStatement * IStatement

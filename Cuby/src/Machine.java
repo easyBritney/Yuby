@@ -376,6 +376,7 @@ public class Machine {
         switch (program.get(pc)) {
             case Instruction.CSTI:   return "CSTI " + program.get(pc+1);
             case Instruction.CSTF:   return "CSTF " + program.get(pc+1);
+            case Instruction.CSTC:   return "CSTC " + (char)(program.get(pc+1).intValue());
             case Instruction.ADD:    return "ADD";
             case Instruction.SUB:    return "SUB";
             case Instruction.MUL:    return "MUL";

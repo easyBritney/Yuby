@@ -39,6 +39,7 @@ let third  (_, _, c) = c
 %left GT LT GE LE
 %left PLUS MINUS
 %left TIMES DIV MOD 
+%left DOT
 %right NOT AMP SELFPLUS SELFMINUS 
 %nonassoc LBRACK          /* highest precedence  */
 
@@ -66,7 +67,6 @@ TopDeclare:
 StructDeclare:
   | STRUCT NAME LBRACE MemberDefList RBRACE         { ($2, $4) }
 //  | STRUCT NAME LBRACE MemberDefList RBRACE NAME
-//  | STRUCT NAME VariableDeclare SEMI                
 ;
 
 
@@ -207,6 +207,7 @@ Access:
   | TIMES Access                        { AccessDeclareReference (Access $2)}
   | TIMES AtExprNotAccess               { AccessDeclareReference $2         }
   | Access LBRACK Expr RBRACK           { AccessIndex($1, $3)    }   
+  | NAME DOT NAME                       { AccessMember(AccessVariable $1, AccessVariable $3)}
 ;
 
 Exprs:
