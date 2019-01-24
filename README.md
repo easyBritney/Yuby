@@ -413,6 +413,28 @@ java Machinetrace ex9.out 0
     - 过程的积累中，逐渐了解一些编译的理念，计算的思维。
     - 在大作业有些功能的完成上，还可以再优化精简。时间足够的话还要继续完善更多的异常处理功能，可以增加一些面向对象的思想在里面，对虚拟机的支持要求更高，也可以做些关于垃圾回收的功能。
     
+
+## 技术评价
+
+| 功能 | 对应文件 | 优  | 良  | 中  |
+| ---- | -------- | --- | --- | --- |
+|变量声明定义|ex(init).c|√|
+|自增、自减|ex(selfplus).c|√|
+|for循环|ex(for).c|√|
+|三目运算符|ex(ternary).c|√|
+|do-while|ex(dowhile).c|√|
+|while|ex(while).c|√|
+|range循环|ex(range).c||√|
+|break|ex(break).c|√|
+|continue|ex(continue).c|√|
+|switch-case|ex(switch).c|√|
+|float 类型|ex(float).c|√||
+|char 类型|ex(chars).c|√|
+|struct结构体|ex(struct).c|√|
+|try-catch|ex(exception).c|√
+|虚拟机类型支持|Machine.java|√|
+|虚拟机异常|exception|√
+
 ## 小组分工
 
 - 胡煜
@@ -436,7 +458,7 @@ java Machinetrace ex9.out 0
 
 - 权重分配表：  
 
-|胡煜|江瑜|
-|---|---|
-|0.95|0.95|
+| 胡煜 | 江瑜 |
+| ---- | ---- |
+| 0.95 | 0.95 |
 
