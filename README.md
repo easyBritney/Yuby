@@ -6,6 +6,7 @@
 - 学生学号：31601147，31601149
 - 学生姓名：胡煜，江瑜
 - 实验指导教师: 郭鸣
+- [github](https://github.com/easyBritney/Yuby)
 ---
 
 ## 简介
