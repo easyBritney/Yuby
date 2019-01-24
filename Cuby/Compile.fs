@@ -225,19 +225,18 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
         let lablist = labend :: lablist
         let (env,fdepth) = varEnv
         let varEnv = (env,fdepth+3*catchs.Length)
-        let (tryins,varEnv) = tryStmt stmt varEnv funEnv lablist []
+        let (tryins,varEnv) = tryStmt stmt varEnv funEnv lablist structEnv []
         let rec everycatch c  = 
             match c with
             | [Catch(exn,body)] -> 
-
                 let exnum = lookupExn exn exns 1
-                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist [])
+                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist structEnv [])
                 let Ctry = PUSHHDLR (exnum ,label) :: tryins @ [POPHDLR]
                 (Ccatch,Ctry)
             | Catch(exn,body) :: tr->
                 let exnum = lookupExn exn exns 1
                 let (C2,C3) = everycatch tr
-                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist C2)
+                let (label, Ccatch) = addLabel( cStmt body varEnv funEnv lablist structEnv C2)
                 let Ctry = PUSHHDLR (exnum,label) :: C3 @ [POPHDLR]
                 (Ccatch,Ctry)
             | [] -> ([],tryins)
@@ -299,15 +298,14 @@ let rec cStmt stmt (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (struc
         let lablist   = dellab lablist
         let labbegin = headlab lablist
         addGOTO labbegin C
-
-and tryStmt tryBlock (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C : instruction list) : instruction list * VarEnv = 
+and tryStmt tryBlock (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (structEnv : StructTypeEnv) (C : instruction list) : instruction list * VarEnv = 
     match tryBlock with
     | Block stmts ->
         let rec pass1 stmts ((_, fdepth) as varEnv) = 
             match stmts with
             | []        -> ([], fdepth,varEnv)
             | s1::sr    ->
-                let (_, varEnv1) as res1 = bStmtordec s1 varEnv
+                let (_, varEnv1) as res1 = bStmtordec s1 varEnv structEnv
                 let (resr, fdepthr,varEnv2) = pass1 sr varEnv1
                 (res1 :: resr, fdepthr,varEnv2)
         let (stmtsback, fdepthend,varEnv1) = pass1 stmts varEnv
@@ -315,9 +313,9 @@ and tryStmt tryBlock (varEnv : VarEnv) (funEnv : FunEnv) (lablist : LabEnv) (C :
             match pairs with
             | [] -> C            
             | (BDec code, varEnv)  :: sr -> code @ pass2 sr C
-            | (BStmt stmt, varEnv) :: sr -> cStmt stmt varEnv funEnv lablist (pass2 sr C)
+            | (BStmt stmt, varEnv) :: sr -> cStmt stmt varEnv funEnv lablist structEnv (pass2 sr C)
         (pass2 stmtsback (addINCSP(snd varEnv - fdepthend) C),varEnv1)
-and bStmtordec stmtOrDec varEnv : bstmtordec * VarEnv =
+and bStmtordec stmtOrDec varEnv (structEnv : StructTypeEnv): bstmtordec * VarEnv =
 
     match stmtOrDec with
     | Statement stmt    ->
